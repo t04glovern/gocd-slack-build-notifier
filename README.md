@@ -6,6 +6,8 @@
     <a href="https://manparvesh.mit-license.org/" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
     <a href="https://www.android.com/" target="_blank"><img src="https://img.shields.io/badge/Platform-Java-blue.svg" alt="License"></a>
     <a href="https://travis-ci.org/t04glovern/gocd-spark-build-notifier" target="_blank"><img src="https://travis-ci.org/t04glovern/gocd-spark-build-notifier.svg?branch=master" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/t04glovern/gocd-spark-build-notifier"><img src="https://codecov.io/gh/t04glovern/gocd-spark-build-notifier/branch/master/graph/badge.svg" />
+</a>
 </div>
 
 ## Setup
