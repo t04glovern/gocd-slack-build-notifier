@@ -1,5 +1,12 @@
-# gocd-spark-build-notifier [![Build Status](https://travis-ci.org/t04glovern/gocd-spark-build-notifier.svg?branch=master)]
-Spark based GoCD build notifier
+
+
+<div align = "center">
+    <h1>GoCD <em>Spark</em> Build Notifier </h1>
+    <p>CiscoSpark based GoCD build notifier</p>
+    <a href="https://manparvesh.mit-license.org/" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+    <a href="https://www.android.com/" target="_blank"><img src="https://img.shields.io/badge/Platform-Java-blue.svg" alt="License"></a>
+    <a href="https://travis-ci.org/t04glovern/gocd-spark-build-notifier" target="_blank"><img src="https://travis-ci.org/t04glovern/gocd-spark-build-notifier.svg?branch=master" alt="Build Status"></a>
+</div>
 
 ## Setup
 Download jar from [releases](https://github.com/t04glovern/gocd-spark-build-notifier/releases) & place it in /plugins/external & restart Go Server.
