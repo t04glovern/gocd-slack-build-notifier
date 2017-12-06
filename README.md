@@ -1,9 +1,8 @@
-[![Build Status](https://snap-ci.com/ashwanthkumar/gocd-slack-build-notifier/branch/master/build_image)](https://snap-ci.com/ashwanthkumar/gocd-slack-build-notifier/branch/master)
 # gocd-slack-build-notifier
 Slack based GoCD build notifier
 
 ## Setup
-Download jar from [releases](https://github.com/ashwanthkumar/gocd-slack-build-notifier/releases) & place it in /plugins/external & restart Go Server.
+Download jar from [releases](https://github.com/t04glovern/gocd-spark-build-notifier/releases) & place it in /plugins/external & restart Go Server.
 
 ## Configuration
 All configurations are in [HOCON](https://github.com/typesafehub/config) format. Plugin searches for the configuration file in the following order
@@ -81,10 +80,6 @@ gocd.slack {
 - `channel` - (Optional) channel where we should send the slack notification. This setting for a rule overrides the global setting
 - `owners` - (Optional) list of slack user handles who must be tagged in the message upon notifications
 - `webhookUrl` - (Optional) Use this webhook url instead of the global one. Useful if you're using multiple slack teams.
-
-## Screenshots
-<img src="https://raw.githubusercontent.com/ashwanthkumar/gocd-slack-build-notifier/master/images/gocd-slack-notifier-demo-with-changes.png" width="400"/>
-<img src="https://raw.githubusercontent.com/ashwanthkumar/gocd-slack-build-notifier/master/images/gocd-slack-notifier-demo.png" width="400"/>
 
 ## License
 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)

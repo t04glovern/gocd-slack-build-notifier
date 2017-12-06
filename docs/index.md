@@ -1,9 +1,9 @@
 [![Build Status](https://snap-ci.com/ashwanthkumar/gocd-slack-build-notifier/branch/master/build_image)](https://snap-ci.com/ashwanthkumar/gocd-slack-build-notifier/branch/master)
-# gocd-slack-build-notifier
-Slack based GoCD build notifier
+# gocd-spark-build-notifier
+Spark based GoCD build notifier
 
 ## Setup
-Download jar from [releases](https://github.com/ashwanthkumar/gocd-slack-build-notifier/releases) & place it in /plugins/external & restart Go Server.
+Download jar from [releases](https://github.com/t04glovern/gocd-spark-build-notifier/releases) & place it in /plugins/external & restart Go Server.
 
 ## Configuration
 All configurations are in [HOCON](https://github.com/typesafehub/config) format. Plugin searches for the configuration file in the following order
@@ -14,7 +14,7 @@ All configurations are in [HOCON](https://github.com/typesafehub/config) format.
 
 Minimalistic configuration would be something like
 ```hocon
-gocd.slack {
+gocd.spark {
   login = "someuser"
   password = "somepassword"
   server-host = "http://localhost:8153/"
@@ -53,12 +53,12 @@ gocd.slack {
 ## Pipeline Rules
 By default the plugin pushes a note about all failed stages across all pipelines to Slack. You have fine grain control over this operation.
 ```hocon
-gocd.slack {
+gocd.spark {
   server-host = "http://localhost:8153/"
   webhookUrl = "https://hooks.slack.com/services/...."
 
   pipelines = [{
-    name = "gocd-slack-build"
+    name = "gocd-spark-build"
     stage = "build"
     group = ".*"
     state = "failed|passed"
@@ -73,7 +73,7 @@ gocd.slack {
   }]
 }
 ```
-`gocd.slack.pipelines` contains all the rules for the go-server. It is a list of rules (see below for what the parameters mean) for various pipelines. The plugin will pick the first matching pipeline rule from the pipelines collection above, so your most specific rule should be first, with the most generic rule at the bottom. Alternatively, set the `process-all-rules` option to `true` and all matching rules will be applied.
+`gocd.spark.pipelines` contains all the rules for the go-server. It is a list of rules (see below for what the parameters mean) for various pipelines. The plugin will pick the first matching pipeline rule from the pipelines collection above, so your most specific rule should be first, with the most generic rule at the bottom. Alternatively, set the `process-all-rules` option to `true` and all matching rules will be applied.
 - `name` - Regex to match the pipeline name
 - `stage` - Regex to match the stage name
 - `group` - Regex to match the pipeline group name
@@ -83,8 +83,8 @@ gocd.slack {
 - `webhookUrl` - (Optional) Use this webhook url instead of the global one. Useful if you're using multiple slack teams.
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/ashwanthkumar/gocd-slack-build-notifier/master/images/gocd-slack-notifier-demo-with-changes.png" width="400"/>
-<img src="https://raw.githubusercontent.com/ashwanthkumar/gocd-slack-build-notifier/master/images/gocd-slack-notifier-demo.png" width="400"/>
+<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/images/gocd-slack-notifier-demo-with-changes.png" width="400"/>
+<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/images/gocd-slack-notifier-demo.png" width="400"/>
 
 ## License
 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)

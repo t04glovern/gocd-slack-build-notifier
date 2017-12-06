@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<go-plugin id="slack.notifier" version="1">
+<go-plugin id="spark.notifier" version="1">
     <about>
-        <name>Slack Notification Plugin</name>
-        <version>1.4.0-RC11</version>
+        <name>Spark Notification Plugin</name>
+        <version>1.0</version>
         <target-go-version>16.3.0</target-go-version>
-        <description>Plugin to send build notifications to slack</description>
+        <description>Plugin to send build notifications to Cisco Spark</description>
         <vendor>
-            <name>Ashwanth Kumar</name>
-            <url>https://github.com/ashwanthkumar/gocd-slack-build-notifier</url>
+            <name>Nathan Glover</name>
+            <url>https://github.com/t04glovern/gocd-spark-build-notifier</url>
         </vendor>
     </about>
 </go-plugin>

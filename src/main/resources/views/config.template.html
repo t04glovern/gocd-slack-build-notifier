@@ -1,5 +1,5 @@
 <div class="form_item_block">
-    <h1>Slack Notifier Plugin</h1>
+    <h1>Spark Notifier Plugin</h1>
     <h4>Note - Values here are for demonstration purpose only</h4>
 </div>
 
@@ -21,17 +21,17 @@
                     <span class="icon_remove delete_parent" ng-click="removeSource($index)"></span>
                 </td>
                 <td class="name_value_cell">
-                    <input class="slack-pipelines-autocomplete slack-plugin-input" type="text"
+                    <input class="spark-pipelines-autocomplete spark-plugin-input" type="text"
                            ng-model="pipeline.pipelineStageJob" tabindex=1
                            ng-minlength="3"
                            ng-required="true"/>
                 </td>
                 <td class="name_value_cell">
-                    <input class="slack-pipeline-channel slack-plugin-input" type="text" ng-model="pipeline.channel"
+                    <input class="spark-pipeline-channel spark-plugin-input" type="text" ng-model="pipeline.channel"
                            tabindex=2/>
                 </td>
                 <td class="name_value_cell">
-                    <input class="slack-pipeline-owner slack-plugin-input" type="text" ng-model="pipeline.owner"
+                    <input class="spark-pipeline-owner spark-plugin-input" type="text" ng-model="pipeline.owner"
                            tabindex=3/>
                 </td>
 
@@ -49,7 +49,7 @@
 var allPipelines;
 setTimeout(function() {
 
-    jQuery("#pipeline-configurations").on("result", "input.slack-pipelines-autocomplete", function() {
+    jQuery("#pipeline-configurations").on("result", "input.spark-pipelines-autocomplete", function() {
         jQuery(this).trigger("input");
     });
 
@@ -79,7 +79,7 @@ setTimeout(function() {
             var DEFAULT_PIPELINE_CONFIG = { pipelineStageJob: ".* | .* | .*", channel: "", owner: ""};
             $scope.$apply(function() {
                 $scope.pipelines = $scope.pipelineConfig ? JSON.parse($scope.pipelineConfig) : [DEFAULT_PIPELINE_CONFIG];
-                slackPluginUpdateAutocompleteViews();
+                sparkPluginUpdateAutocompleteViews();
                 $scope.addPipelineRule = function() {
                     $scope.pipelines.push(DEFAULT_PIPELINE_CONFIG);
                 };
@@ -89,16 +89,16 @@ setTimeout(function() {
             });
             $scope.$watch("pipelines", function(){
                 $scope.pipelineConfig = angular.copy($scope.pipelines).toJSON();
-                slackPluginUpdateAutocompleteViews();
+                sparkPluginUpdateAutocompleteViews();
             }, true);
             clearInterval(interval);
-            slackPluginUpdateAutocompleteViews();
+            sparkPluginUpdateAutocompleteViews();
         }, 50);
     });
 }, 50);
 
-function slackPluginUpdateAutocompleteViews() {
-    jQuery(".slack-pipelines-autocomplete").autocomplete(allPipelines, {
+function sparkPluginUpdateAutocompleteViews() {
+    jQuery(".spark-pipelines-autocomplete").autocomplete(allPipelines, {
         minChars: 0,
         width: 400,
         matchContains: "word",
@@ -117,7 +117,7 @@ function slackPluginUpdateAutocompleteViews() {
 
 </script>
 <style type="text/css">
-    input.slack-plugin-input {
+    input.spark-plugin-input {
         width: 210px;
     }
 </style>
