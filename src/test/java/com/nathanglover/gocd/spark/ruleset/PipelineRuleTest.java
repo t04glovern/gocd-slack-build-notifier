@@ -24,7 +24,7 @@ public class PipelineRuleTest {
         assertThat(build.getStatus(), hasItem(FAILED));
         assertThat(build.getChannel(), is("#gocd"));
         assertThat(build.getWebhookUrl(), is("https://hooks.slack.com/services/"));
-        assertThat(build.getOwners(), is(Sets.of("ashwanthkumar", "gobot")));
+        assertThat(build.getOwners(), is(Sets.of("t04glovern", "gobot")));
     }
 
     @Test
@@ -36,20 +36,20 @@ public class PipelineRuleTest {
         PipelineRule build = PipelineRule.fromConfig(config);
 
         PipelineRule mergedRule = PipelineRule.merge(build, defaultRule);
-        assertThat(mergedRule.getNameRegex(), is("gocd-slack-build-notifier"));
+        assertThat(mergedRule.getNameRegex(), is("gocd-spark-build-notifier"));
         assertThat(mergedRule.getGroupRegex(), is("ci"));
         assertThat(mergedRule.getStageRegex(), is("build"));
         assertThat(mergedRule.getStatus(), hasItem(FAILED));
         assertThat(mergedRule.getChannel(), is("#gocd"));
-        assertThat(mergedRule.getOwners(), is(Sets.of("ashwanthkumar", "gobot")));
+        assertThat(mergedRule.getOwners(), is(Sets.of("t04glovern", "gobot")));
     }
 
     @Test
     public void shouldMatchThePipelineAndStageAgainstRegex() {
         PipelineRule pipelineRule = new PipelineRule("gocd-.*", ".*").setGroupRegex("ci").setStatus(Sets.of(FAILED, PASSED));
-        assertTrue(pipelineRule.matches("gocd-slack-build-notifier", "build", "ci", "failed"));
-        assertTrue(pipelineRule.matches("gocd-slack-build-notifier", "package", "ci", "passed"));
-        assertTrue(pipelineRule.matches("gocd-slack-build-notifier", "publish", "ci", "passed"));
+        assertTrue(pipelineRule.matches("gocd-spark-build-notifier", "build", "ci", "failed"));
+        assertTrue(pipelineRule.matches("gocd-spark-build-notifier", "package", "ci", "passed"));
+        assertTrue(pipelineRule.matches("gocd-spark-build-notifier", "publish", "ci", "passed"));
 
         assertFalse(pipelineRule.matches("gocd", "publish", "ci", "failed"));
     }

@@ -4,12 +4,14 @@ import com.ciscospark.*;
 
 import com.nathanglover.gocd.spark.jsonapi.MaterialRevision;
 import com.nathanglover.gocd.spark.jsonapi.Stage;
-import com.thoughtworks.go.plugin.api.logging.Logger;
 import com.nathanglover.gocd.spark.jsonapi.Modification;
 import com.nathanglover.gocd.spark.jsonapi.Pipeline;
 import com.nathanglover.gocd.spark.ruleset.PipelineRule;
 import com.nathanglover.gocd.spark.ruleset.PipelineStatus;
 import com.nathanglover.gocd.spark.ruleset.Rules;
+
+import com.thoughtworks.go.plugin.api.logging.Logger;
+
 import in.ashwanthkumar.utils.collections.Lists;
 import in.ashwanthkumar.utils.func.Function;
 import in.ashwanthkumar.utils.lang.StringUtils;
@@ -25,7 +27,6 @@ public class SparkPipelineListener extends PipelineListener {
     public static final int DEFAULT_MAX_CHANGES_PER_MATERIAL_IN_SLACK = 5;
     private Logger LOG = Logger.getLoggerFor(SparkPipelineListener.class);
 
-    //private final Slack slack;
     private final Spark spark;
 
     public SparkPipelineListener(Rules rules) {
@@ -37,7 +38,7 @@ public class SparkPipelineListener extends PipelineListener {
                 .build();
 
         //slack = new Slack(rules.getWebHookUrl(), rules.getProxy());
-        //updateSlackChannel(rules.getSlackChannel());
+        updateSlackChannel(rules.getSlackChannel());
 
         //slack.displayName(rules.getSlackDisplayName())
         //        .icon(rules.getSlackUserIcon());

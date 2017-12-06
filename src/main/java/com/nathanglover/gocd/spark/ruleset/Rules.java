@@ -62,6 +62,11 @@ public class Rules {
         return sparkAccessToken;
     }
 
+    public Rules setSparkAccessToken(String sparkAccessToken) {
+        this.sparkAccessToken = sparkAccessToken;
+        return this;
+    }
+
     public String getSlackChannel() {
         return slackChannel;
     }
@@ -215,7 +220,7 @@ public class Rules {
             channel = config.getString("channel");
         }
 
-        String displayName = "gocd-slack-bot";
+        String displayName = "gocd-spark-bot";
         if (config.hasPath("slackDisplayName")) {
             displayName = config.getString("slackDisplayName");
         }
