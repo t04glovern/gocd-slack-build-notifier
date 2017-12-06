@@ -3,4 +3,4 @@ rm -rf dist/
 mkdir dist
 
 mvn clean package
-cp target/gocd-slack-notifier*.jar dist/
+cp target/gocd-spark-notifier*.jar dist/
