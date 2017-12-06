@@ -1,5 +1,5 @@
-# gocd-slack-build-notifier
-Slack based GoCD build notifier
+# gocd-spark-build-notifier [![Build Status](https://travis-ci.org/t04glovern/gocd-spark-build-notifier.svg?branch=master)]
+Spark based GoCD build notifier
 
 ## Setup
 Download jar from [releases](https://github.com/t04glovern/gocd-spark-build-notifier/releases) & place it in /plugins/external & restart Go Server.
