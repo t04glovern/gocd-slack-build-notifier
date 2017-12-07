@@ -54,3 +54,4 @@ sample.db
 target/
 dist/
 go_notify.conf.secret
+*.psd

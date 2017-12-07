@@ -102,14 +102,14 @@ public class SparkPipelineListener extends PipelineListener {
 					.append(stage.approvedBy);
 			if (details.buildCause.triggerForced) {
 				buildAttachment
-						.append("\n" + "**Reason:** Manual Trigger");
+						.append("\n" + "Reason: Manual Trigger");
 			} else {
 				buildAttachment
-						.append("\n" + "**Reason:** ")
+						.append("\n" + "Reason: ")
 						.append(details.buildCause.triggerMessage);
 			}
 			buildAttachment
-					.append("\n" + "**Label:** ")
+					.append("\n" + "Label: ")
 					.append(details.label);
 			if (rules.getDisplayConsoleLogLinks()) {
 				consoleLogLinks = createConsoleLogLinks(rules.getGoServerHost(), details, stage, pipelineStatus);
@@ -120,8 +120,9 @@ public class SparkPipelineListener extends PipelineListener {
 			LOG.warn("Couldn't fetch build details", e);
 		}
 		buildAttachment
-				.append("\n" + "**Status:** ")
-				.append(pipelineStatus.name());
+				.append("\n" + "Status: ")
+				.append(pipelineStatus.name())
+				.append("\n");
 
 		// Describe the root changes that made up this build.
 		if (rules.getDisplayMaterialChanges()) {
@@ -161,7 +162,7 @@ public class SparkPipelineListener extends PipelineListener {
 				}
 			} catch (Exception e) {
 				buildAttachment
-						.append("\n" + "**Changes:** ")
+						.append("\n" + "Changes: ")
 						.append("(Couldn't fetch changes; see server log.)");
 				LOG.warn("Couldn't fetch changes", e);
 			}
@@ -170,7 +171,7 @@ public class SparkPipelineListener extends PipelineListener {
 		if (!consoleLogLinks.isEmpty()) {
 			String logLinks = Lists.mkString(consoleLogLinks, "", "", "\n");
 			buildAttachment
-					.append("\n" + "**Console Logs:** ")
+					.append("\n" + "Console Logs: ")
 					.append(logLinks);
 		}
 
@@ -182,7 +183,7 @@ public class SparkPipelineListener extends PipelineListener {
 				}
 			});
 			buildAttachment
-					.append("\n" + "**Owners:** ")
+					.append("\n" + "Owners: ")
 					.append(Lists.mkString(sparkOwners, ","));
 		}
 		LOG.info("Pushing " + title + " notification to Spark");
