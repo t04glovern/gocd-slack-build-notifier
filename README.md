@@ -23,14 +23,18 @@ All configurations are in [HOCON](https://github.com/typesafehub/config) format.
 Minimalistic configuration would be something like
 ```hocon
 gocd.spark {
-  login = "someuser"
-  password = "somepassword"
+  login = "gocd_user"
+  password = "gocd_password"
   server-host = "http://localhost:8153/"
   api-server-host = "http://localhost:8153/"
-  webhookUrl = "https://hooks.spark.com/services/...."
+  
+  # Spark fields
+  bearerToken = "vmGKT5YmpnYmryykWyJCRNPccLO4OkSPw3yNvoW2O0vLrZaBBDif2Gvz7aTX8jcx"
+  webhookUrl = "https://example.com/webhook/..."
+  webhookSecret = "w3yNvoW2O0vLrZaBBDif2Gvz7aTX8jcx"
 
   # optional fields
-  channel = "#build"
+  room = "f9d5fc50-c80b-3485-925f-88d8b47e8a75"
   sparkDisplayName = "gocd-spark-bot"
   sparkUserIconURL = "http://example.com/spark-bot.png"
   display-console-log-links = true
@@ -46,9 +50,10 @@ gocd.spark {
 - `login` - Login for a Go user who is authorized to access the REST API.
 - `password` - Password for the user specified above. You might want to create a less privileged user for this plugin.
 - `server-host` - FQDN of the Go Server. All links on the spark channel will be relative to this host.
-- `api-server-host` - This is an optional attribute. Set this field to localhost so server will use this endpoint to get `PipelineHistory` and `PipelineInstance`  
-- `webhookUrl` - Spark Webhook URL
-- `channel` - Override the default channel where we should send the notifications in spark. You can also give a value starting with `@` to send it to any specific user.
+- `api-server-host` - This is an optional attribute. Set this field to localhost so server will use this endpoint to get `PipelineHistory` and `PipelineInstance`
+- `bearerToken` - Bearer/Access token for your Spark Bot (https://developer.ciscospark.com/bot-detail.html) 
+- `webhookUrl` - Custom Cisco Spark Webhook URL (https://developer.ciscospark.com/resource-webhooks.html)
+- `room` - Override the default room where we should send the notifications in spark.
 - `display-console-log-links` - Display console log links in the notification. Defaults to true, set to false if you want to hide.
 - `displayMaterialChanges` - Display material changes in the notification (git revisions for example). Defaults to true, set to false if you want to hide.
 - `process-all-rules` - If true, all matching rules are applied instead of just the first.
@@ -63,16 +68,16 @@ By default the plugin pushes a note about all failed stages across all pipelines
 ```hocon
 gocd.spark {
   server-host = "http://localhost:8153/"
-  webhookUrl = "https://hooks.spark.com/services/...."
+  webhookUrl = "https://example.com/webhook/..."
 
   pipelines = [{
     name = "gocd-spark-build"
     stage = "build"
     group = ".*"
     state = "failed|passed"
-    channel = "#oss-build-group"
-    owners = ["ashwanthkumar"]
-    webhookUrl = "https://hooks.spark.com/services/another-team-hook-id..."
+    room = "f9d5fc50-c80b-3485-925f-88d8b47e8a75"
+    owners = ["t04glovern"]
+    webhookUrl = "https://example.com/webhook/..."
   },
   {
     name = ".*"

@@ -52,19 +52,19 @@ public class RulesTest {
         assertThat(foundRules1.size(), is(1));
         assertThat(foundRules1.get(0).getNameRegex(), is("[a-z]*"));
         assertThat(foundRules1.get(0).getStageRegex(), is("[a-z]*"));
-        assertThat(foundRules1.get(0).getChannel(), is("ch1"));
+        assertThat(foundRules1.get(0).getRoom(), is("ch1"));
 
         List<PipelineRule> foundRules2 = rules.find("123", "456", "ci", Status.Building.getStatus());
         assertThat(foundRules2.size(), is(1));
         assertThat(foundRules2.get(0).getNameRegex(), is("\\d*"));
         assertThat(foundRules2.get(0).getStageRegex(), is("\\d*"));
-        assertThat(foundRules2.get(0).getChannel(), is("ch2"));
+        assertThat(foundRules2.get(0).getRoom(), is("ch2"));
 
         List<PipelineRule> foundRules3 = rules.find("123", "456", "ci", Status.Passed.getStatus());
         assertThat(foundRules3.size(), is(1));
         assertThat(foundRules3.get(0).getNameRegex(), is("\\d*"));
         assertThat(foundRules3.get(0).getStageRegex(), is("\\d*"));
-        assertThat(foundRules3.get(0).getChannel(), is("ch3"));
+        assertThat(foundRules3.get(0).getRoom(), is("ch3"));
 
         List<PipelineRule> foundRules4 = rules.find("pipeline1", "stage1", "ci", Status.Passed.getStatus());
         assertThat(foundRules4.size(), is(0));
@@ -82,12 +82,12 @@ public class RulesTest {
 
         List<PipelineRule> foundRules1 = rules.find("abc", "stage1", "ci", Status.Building.getStatus());
         assertThat(foundRules1.size(), is(1));
-        assertThat(foundRules1.get(0).getChannel(), is("ch1"));
+        assertThat(foundRules1.get(0).getRoom(), is("ch1"));
 
         List<PipelineRule> foundRules2 = rules.find("abc", "stage2", "ci", Status.Building.getStatus());
         assertThat(foundRules2.size(), is(2));
-        assertThat(foundRules2.get(0).getChannel(), is("ch1"));
-        assertThat(foundRules2.get(1).getChannel(), is("ch2"));
+        assertThat(foundRules2.get(0).getRoom(), is("ch1"));
+        assertThat(foundRules2.get(1).getRoom(), is("ch2"));
 
         List<PipelineRule> foundRules3 = rules.find("abc1", "stage2", "ci", Status.Building.getStatus());
         assertThat(foundRules3.size(), is(0));
@@ -122,10 +122,10 @@ public class RulesTest {
         assertThat(rules.getGoAPIServerHost(), is("http://localhost"));
     }
 
-    private static PipelineRule pipelineRule(String pipeline, String stage, String channel, Set<PipelineStatus> statuses) {
+    private static PipelineRule pipelineRule(String pipeline, String stage, String room, Set<PipelineStatus> statuses) {
         PipelineRule pipelineRule = new PipelineRule(pipeline, stage);
         pipelineRule.setStatus(statuses);
-        pipelineRule.setChannel(channel);
+        pipelineRule.setRoom(room);
         return pipelineRule;
     }
 

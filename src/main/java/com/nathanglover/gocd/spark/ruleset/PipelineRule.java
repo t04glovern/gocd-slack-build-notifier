@@ -6,7 +6,9 @@ import in.ashwanthkumar.utils.collections.Lists;
 import in.ashwanthkumar.utils.func.Predicate;
 import in.ashwanthkumar.utils.lang.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static in.ashwanthkumar.utils.lang.StringUtils.isEmpty;
 
@@ -14,7 +16,7 @@ public class PipelineRule {
     private String nameRegex;
     private String stageRegex;
     private String groupRegex;
-    private String channel;
+    private String room;
     private String webhookUrl;
     private Set<String> owners = new HashSet<>();
     private Set<PipelineStatus> status = new HashSet<>();
@@ -26,7 +28,7 @@ public class PipelineRule {
         this.nameRegex = copy.nameRegex;
         this.stageRegex = copy.stageRegex;
         this.groupRegex = copy.groupRegex;
-        this.channel = copy.channel;
+        this.room = copy.room;
         this.status = copy.status;
         this.owners = copy.owners;
         this.webhookUrl = copy.webhookUrl;
@@ -64,12 +66,12 @@ public class PipelineRule {
         return this;
     }
 
-    public String getChannel() {
-        return channel;
+    public String getRoom() {
+        return room;
     }
 
-    public PipelineRule setChannel(String channel) {
-        this.channel = channel;
+    public PipelineRule setRoom(String room) {
+        this.room = room;
         return this;
     }
 
@@ -127,7 +129,7 @@ public class PipelineRule {
 
         PipelineRule that = (PipelineRule) o;
 
-        if (channel != null ? !channel.equals(that.channel) : that.channel != null) return false;
+        if (room != null ? !room.equals(that.room) : that.room != null) return false;
         if (nameRegex != null ? !nameRegex.equals(that.nameRegex) : that.nameRegex != null) return false;
         if (groupRegex != null ? !groupRegex.equals(that.groupRegex) : that.groupRegex != null) return false;
         if (stageRegex != null ? !stageRegex.equals(that.stageRegex) : that.stageRegex != null) return false;
@@ -143,7 +145,7 @@ public class PipelineRule {
         int result = nameRegex != null ? nameRegex.hashCode() : 0;
         result = 31 * result + (groupRegex != null ? groupRegex.hashCode() : 0);
         result = 31 * result + (stageRegex != null ? stageRegex.hashCode() : 0);
-        result = 31 * result + (channel != null ? channel.hashCode() : 0);
+        result = 31 * result + (room != null ? room.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (owners != null ? owners.hashCode() : 0);
         result = 31 * result + (webhookUrl != null ? webhookUrl.hashCode() : 0);
@@ -156,7 +158,7 @@ public class PipelineRule {
                 "nameRegex='" + nameRegex + '\'' +
                 ", groupRegex='" + groupRegex + '\'' +
                 ", stageRegex='" + stageRegex + '\'' +
-                ", channel='" + channel + '\'' +
+                ", room='" + room + '\'' +
                 ", status=" + status +
                 ", owners=" + owners +
                 ", webhookUrl=" + webhookUrl +
@@ -181,8 +183,8 @@ public class PipelineRule {
             }
             pipelineRule.setStatus(status);
         }
-        if (config.hasPath("channel")) {
-            pipelineRule.setChannel(config.getString("channel"));
+        if (config.hasPath("room")) {
+            pipelineRule.setRoom(config.getString("room"));
         }
         if (config.hasPath("webhookUrl")) {
             pipelineRule.setWebhookUrl(config.getString("webhookUrl"));
@@ -200,10 +202,10 @@ public class PipelineRule {
         return pipelineRule;
     }
 
-    public static PipelineRule fromConfig(Config config, String channel) {
+    public static PipelineRule fromConfig(Config config, String room) {
         PipelineRule pipelineRule = fromConfig(config);
-        if (StringUtils.isEmpty(pipelineRule.getChannel())) {
-            pipelineRule.setChannel(channel);
+        if (StringUtils.isEmpty(pipelineRule.getRoom())) {
+            pipelineRule.setRoom(room);
         }
         return pipelineRule;
     }
@@ -222,8 +224,8 @@ public class PipelineRule {
             ruleToReturn.setStageRegex(defaultRule.getStageRegex());
         }
 
-        if (isEmpty(pipelineRule.getChannel())) {
-            ruleToReturn.setChannel(defaultRule.getChannel());
+        if (isEmpty(pipelineRule.getRoom())) {
+            ruleToReturn.setRoom(defaultRule.getRoom());
         }
 
         if (isEmpty(pipelineRule.getWebhookUrl())) {

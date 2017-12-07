@@ -21,15 +21,20 @@ public class Rules {
     private static Logger LOGGER = Logger.getLoggerFor(Rules.class);
 
     private boolean enabled;
-    private String webHookUrl;
-    private String sparkAccessToken;
-    private String slackChannel;
-    private String slackDisplayName;
-    private String slackUserIconURL;
+
+    private String sparkWebHookUrl;
+    private String sparkWebHookSecret;
+    private String sparkWebHookName;
+    private String sparkBearerToken;
+    private String sparkRoom;
+    private String sparkDisplayName;
+    private String sparkUserIconURL;
+
     private String goServerHost;
     private String goAPIServerHost;
     private String goLogin;
     private String goPassword;
+
     private boolean displayConsoleLogLinks;
     private boolean displayMaterialChanges;
     private boolean processAllRules;
@@ -49,60 +54,77 @@ public class Rules {
         return this;
     }
 
-    public String getWebHookUrl() {
-        return webHookUrl;
+
+    /**
+     * Spark Specific Configuration GET/SET
+     */
+    public String getSparkWebHookUrl() {
+        return sparkWebHookUrl;
     }
 
-    public Rules setWebHookUrl(String webHookUrl) {
-        this.webHookUrl = webHookUrl;
+    public Rules setSparkWebHookUrl(String sparkWebHookUrl) {
+        this.sparkWebHookUrl = sparkWebHookUrl;
         return this;
     }
 
-    public String getSparkAccessToken() {
-        return sparkAccessToken;
+    public String getSparkWebHookSecret() {
+        return sparkWebHookSecret;
     }
 
-    public Rules setSparkAccessToken(String sparkAccessToken) {
-        this.sparkAccessToken = sparkAccessToken;
+    public Rules setSparkWebHookSecret(String sparkWebHookSecret) {
+        this.sparkWebHookSecret = sparkWebHookSecret;
         return this;
     }
 
-    public String getSlackChannel() {
-        return slackChannel;
+    public String getSparkWebHookName() {
+        return sparkWebHookName;
     }
 
-    public Rules setSlackChannel(String slackChannel) {
-        this.slackChannel = slackChannel;
+    public Rules setSparkWebHookName(String sparkWebHookName) {
+        this.sparkWebHookName = sparkWebHookName;
         return this;
     }
 
-    public String getSlackDisplayName() {
-        return slackDisplayName;
+    public String getSparkBearerToken() {
+        return sparkBearerToken;
     }
 
-    private Rules setSlackDisplayName(String displayName) {
-        this.slackDisplayName = displayName;
+    public Rules setSparkBearerToken(String sparkBearerToken) {
+        this.sparkBearerToken = sparkBearerToken;
         return this;
     }
 
-    public String getSlackUserIcon() {
-        return slackUserIconURL;
+    public String getSparkRoom() {
+        return sparkRoom;
     }
 
-    private Rules setSlackUserIcon(String iconURL) {
-        this.slackUserIconURL = iconURL;
+    public Rules setSparkRoom(String sparkRoom) {
+        this.sparkRoom = sparkRoom;
         return this;
     }
 
-    public List<PipelineRule> getPipelineRules() {
-        return pipelineRules;
+    public String getSparkDisplayName() {
+        return sparkDisplayName;
     }
 
-    public Rules setPipelineRules(List<PipelineRule> pipelineRules) {
-        this.pipelineRules = pipelineRules;
+    private Rules setSparkDisplayName(String sparkDisplayName) {
+        this.sparkDisplayName = sparkDisplayName;
         return this;
     }
 
+    public String getSparkUserIconURL() {
+        return sparkUserIconURL;
+    }
+
+    private Rules setSparkUserIconURL(String sparkUserIconURL) {
+        this.sparkUserIconURL = sparkUserIconURL;
+        return this;
+    }
+
+
+    /**
+     * GoCD Server Specific Configuration GET/SET
+     */
     public String getGoServerHost() {
         return goServerHost;
     }
@@ -111,7 +133,6 @@ public class Rules {
         this.goServerHost = goServerHost;
         return this;
     }
-
 
     public String getGoAPIServerHost() {
         if (StringUtils.isNotEmpty(goAPIServerHost)) {
@@ -143,6 +164,10 @@ public class Rules {
         return this;
     }
 
+
+    /**
+     * Control Specific Configuration GET/SET
+     */
     public boolean getDisplayConsoleLogLinks() {
         return displayConsoleLogLinks;
     }
@@ -179,12 +204,29 @@ public class Rules {
         return this;
     }
 
+
+    /**
+     * Proxy Specific Configuration GET/SET
+     */
     public Proxy getProxy() {
         return proxy;
     }
 
     public Rules setProxy(Proxy proxy) {
         this.proxy = proxy;
+        return this;
+    }
+
+
+    /**
+     * Pipeline Specific Configuration GET/SET
+     */
+    public List<PipelineRule> getPipelineRules() {
+        return pipelineRules;
+    }
+
+    public Rules setPipelineRules(List<PipelineRule> pipelineRules) {
+        this.pipelineRules = pipelineRules;
         return this;
     }
 
@@ -215,19 +257,27 @@ public class Rules {
         boolean isEnabled = config.getBoolean("enabled");
 
         String webhookUrl = config.getString("webhookUrl");
-        String channel = null;
-        if (config.hasPath("channel")) {
-            channel = config.getString("channel");
+        String webhookSecret = config.getString("webhookSecret");
+        String webhookName = "GoCD Webhook";
+        if (config.hasPath("webhookName")) {
+            webhookName = config.getString("webhookName");
+        }
+
+        String bearerToken = config.getString("bearerToken");
+
+        String room = null;
+        if (config.hasPath("room")) {
+            room = config.getString("room");
         }
 
         String displayName = "gocd-spark-bot";
-        if (config.hasPath("slackDisplayName")) {
-            displayName = config.getString("slackDisplayName");
+        if (config.hasPath("sparkDisplayName")) {
+            displayName = config.getString("sparkDisplayName");
         }
 
         String iconURL = "https://raw.githubusercontent.com/ashwanthkumar/assets/c597777ee749c89fec7ce21304d727724a65be7d/images/gocd-logo.png";
-        if (config.hasPath("slackUserIconURL")) {
-            iconURL = config.getString("slackUserIconURL");
+        if (config.hasPath("sparkUserIconURL")) {
+            iconURL = config.getString("sparkUserIconURL");
         }
 
         String serverHost = config.getString("server-host");
@@ -277,21 +327,20 @@ public class Rules {
             }
         }
 
-        final PipelineRule defaultRule = PipelineRule.fromConfig(config.getConfig("default"), channel);
-
-        List<PipelineRule> pipelineRules = Lists.map((List<Config>) config.getConfigList("pipelines"), new Function<Config, PipelineRule>() {
-            public PipelineRule apply(Config input) {
-                return merge(PipelineRule.fromConfig(input), defaultRule);
-            }
-        });
+        final PipelineRule defaultRule = PipelineRule.fromConfig(config.getConfig("default"), room);
+        List<PipelineRule> pipelineRules = Lists.map(config.getConfigList(
+                "pipelines"), input -> merge(PipelineRule.fromConfig(input), defaultRule
+        ));
 
         Rules rules = new Rules()
                 .setEnabled(isEnabled)
-                .setWebHookUrl(webhookUrl)
-                .setSlackChannel(channel)
-                .setSlackDisplayName(displayName)
-                .setSlackUserIcon(iconURL)
-                .setPipelineRules(pipelineRules)
+                .setSparkWebHookUrl(webhookUrl)
+                .setSparkWebHookSecret(webhookSecret)
+                .setSparkWebHookName(webhookName)
+                .setSparkBearerToken(bearerToken)
+                .setSparkRoom(room)
+                .setSparkDisplayName(displayName)
+                .setSparkUserIconURL(iconURL)
                 .setGoServerHost(serverHost)
                 .setGoAPIServerHost(apiServerHost)
                 .setGoLogin(login)
@@ -300,7 +349,8 @@ public class Rules {
                 .setDisplayMaterialChanges(displayMaterialChanges)
                 .setProcessAllRules(processAllRules)
                 .setTruncateChanges(truncateChanges)
-                .setProxy(proxy);
+                .setProxy(proxy)
+                .setPipelineRules(pipelineRules);
         try {
             rules.pipelineListener = Class.forName(config.getString("listener")).asSubclass(PipelineListener.class).getConstructor(Rules.class).newInstance(rules);
         } catch (Exception e) {

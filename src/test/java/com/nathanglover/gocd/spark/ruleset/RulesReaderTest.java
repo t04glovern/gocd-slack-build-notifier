@@ -12,12 +12,11 @@ import static org.junit.Assert.assertThat;
 
 public class RulesReaderTest {
 
-    /*
     @Test
     public void shouldReadTestConfig() {
         Rules rules = RulesReader.read("configs/test-config-1.conf");
         assertThat(rules.isEnabled(), is(true));
-        assertThat(rules.getSlackChannel(), is("#gocd"));
+        assertThat(rules.getSparkRoom(), is("#gocd"));
         assertThat(rules.getGoServerHost(), is("http://localhost:8080/"));
         assertThat(rules.getPipelineRules().size(), is(2));
         assertThat(rules.getPipelineRules().size(), is(2));
@@ -28,7 +27,7 @@ public class RulesReaderTest {
                 .setNameRegex("gocd-spark-build-notifier")
                 .setStageRegex(".*")
                 .setGroupRegex(".*")
-                .setChannel("#gocd")
+                .setRoom("#gocd")
                 .setStatus(Sets.of(PipelineStatus.FAILED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule1));
 
@@ -36,7 +35,7 @@ public class RulesReaderTest {
                 .setNameRegex("my-java-utils")
                 .setStageRegex("build")
                 .setGroupRegex("ci")
-                .setChannel("#gocd-build")
+                .setRoom("#gocd-build")
                 .setStatus(Sets.of(PipelineStatus.FAILED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule2));
 
@@ -52,11 +51,11 @@ public class RulesReaderTest {
         assertThat(rules.getGoLogin(), is("someuser"));
         assertThat(rules.getGoPassword(), is("somepassword"));
         assertThat(rules.getGoServerHost(), is("http://localhost:8153/"));
-        assertThat(rules.getWebHookUrl(), is("https://hooks.slack.com/services/"));
+        assertThat(rules.getSparkWebHookUrl(), is("https://api.ciscospark.com/v1/webhooks/"));
 
-        assertThat(rules.getSlackChannel(), is("#build"));
-        assertThat(rules.getSlackDisplayName(), is("gocd-spark-bot"));
-        assertThat(rules.getSlackUserIcon(), is("http://example.com/spark-bot.png"));
+        assertThat(rules.getSparkRoom(), is("#build"));
+        assertThat(rules.getSparkDisplayName(), is("gocd-spark-bot"));
+        assertThat(rules.getSparkUserIconURL(), is("http://example.com/spark-bot.png"));
 
         // Default rules
         assertThat(rules.getPipelineRules().size(), is(1));
@@ -67,7 +66,7 @@ public class RulesReaderTest {
                 .setNameRegex(".*")
                 .setStageRegex(".*")
                 .setGroupRegex(".*")
-                .setChannel("#build")
+                .setRoom("#build")
                 .setStatus(Sets.of(PipelineStatus.CANCELLED, PipelineStatus.BROKEN, PipelineStatus.FAILED, PipelineStatus.FIXED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule));
 
@@ -78,18 +77,18 @@ public class RulesReaderTest {
     public void shouldReadMinimalConfigWithPipeline() {
         Rules rules = RulesReader.read("configs/test-config-minimal-with-pipeline.conf");
         assertThat(rules.isEnabled(), is(true));
-        assertThat(rules.getSlackChannel(), nullValue());
+        assertThat(rules.getSparkRoom(), nullValue());
         assertThat(rules.getGoServerHost(), is("https://go-instance:8153/"));
-        assertThat(rules.getWebHookUrl(), is("https://hooks.slack.com/services/"));
+        assertThat(rules.getSparkWebHookUrl(), is("https://api.ciscospark.com/v1/webhooks/"));
         assertThat(rules.getPipelineRules().size(), is(1));
 
         PipelineRule pipelineRule = new PipelineRule()
                 .setNameRegex(".*")
                 .setStageRegex(".*")
                 .setGroupRegex(".*")
-                .setChannel("#foo")
+                .setRoom("#foo")
                 .setStatus(Sets.of(PipelineStatus.FAILED))
-                .setWebhookUrl("https://hooks.slack.com/services/for-pipeline");
+                .setWebhookUrl("https://api.ciscospark.com/v1/webhooks/for-pipeline");
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule));
 
         assertThat(rules.getPipelineListener(), notNullValue());
@@ -99,9 +98,9 @@ public class RulesReaderTest {
     public void shouldReadMinimalConfigWithPipelineAndEnvironmentVariables() {
         Rules rules = RulesReader.read("configs/test-config-minimal-with-env-variables.conf");
         assertThat(rules.isEnabled(), is(true));
-        assertThat(rules.getSlackChannel(), nullValue());
+        assertThat(rules.getSparkRoom(), nullValue());
         assertThat(rules.getGoServerHost(), is("https://go-instance:8153/"));
-        assertThat(rules.getWebHookUrl(), is("https://hooks.slack.com/services/"));
+        assertThat(rules.getSparkWebHookUrl(), is("https://api.ciscospark.com/v1/webhooks/"));
         assertThat(rules.getPipelineRules().size(), is(1));
         assertThat(rules.getGoLogin(), is(System.getenv("HOME")));
 
@@ -109,7 +108,7 @@ public class RulesReaderTest {
                 .setNameRegex(".*")
                 .setStageRegex(".*")
                 .setGroupRegex(".*")
-                .setChannel("#foo")
+                .setRoom("#foo")
                 .setStatus(Sets.of(PipelineStatus.FAILED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule));
 
@@ -129,5 +128,4 @@ public class RulesReaderTest {
         Proxy expectedProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 5555));
         assertThat(rules.getProxy(), is(expectedProxy));
     }
-    */
 }

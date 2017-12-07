@@ -22,8 +22,8 @@ public class PipelineRuleTest {
         assertThat(build.getStageRegex(), is(".*"));
         assertThat(build.getGroupRegex(), is(".*"));
         assertThat(build.getStatus(), hasItem(FAILED));
-        assertThat(build.getChannel(), is("#gocd"));
-        assertThat(build.getWebhookUrl(), is("https://hooks.slack.com/services/"));
+        assertThat(build.getRoom(), is("#gocd"));
+        assertThat(build.getWebhookUrl(), is("https://api.ciscospark.com/v1/webhooks/"));
         assertThat(build.getOwners(), is(Sets.of("t04glovern", "gobot")));
     }
 
@@ -40,7 +40,7 @@ public class PipelineRuleTest {
         assertThat(mergedRule.getGroupRegex(), is("ci"));
         assertThat(mergedRule.getStageRegex(), is("build"));
         assertThat(mergedRule.getStatus(), hasItem(FAILED));
-        assertThat(mergedRule.getChannel(), is("#gocd"));
+        assertThat(mergedRule.getRoom(), is("#gocd"));
         assertThat(mergedRule.getOwners(), is(Sets.of("t04glovern", "gobot")));
     }
 
