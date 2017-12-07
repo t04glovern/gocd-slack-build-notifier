@@ -1,4 +1,4 @@
-<img src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-icon.png" data-canonical-src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-icon.png" align="center" width="200"/>
+<img src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-banner.png" data-canonical-src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-banner.png" align="center"/>
 
 <div align = "center">
     <h1>GoCD <em>Spark</em> Build Notifier </h1>
