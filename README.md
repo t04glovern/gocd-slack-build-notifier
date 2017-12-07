@@ -1,4 +1,4 @@
-<img src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-icon.png" data-canonical-src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-icon.png" align="center" />
+<img src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-icon.png" data-canonical-src="https://raw.github.com/t04glovern/gocd-spark-build-notifier/master/img/gocd-icon.png" align="center" width="200"/>
 
 <div align = "center">
     <h1>GoCD <em>Spark</em> Build Notifier </h1>
@@ -96,8 +96,8 @@ gocd.spark {
 - `webhookUrl` - (Optional) Use this webhook url instead of the global one. Useful if you're using multiple spark teams.
 
 ## Images
-<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/spark-notification-plugin-01.png" width="400"/>
-<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/spark-notification-plugin-02.png" width="400"/>
+<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/spark-notification-plugin-01.png" align="center" width="650"/>
+<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/spark-notification-plugin-02.png" align="center" width="650"/>
 
 ## License
 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
