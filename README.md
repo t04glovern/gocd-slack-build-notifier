@@ -56,11 +56,11 @@ gocd.spark {
 
 In order to get your bearer/access token you need to [create a bot](https://developer.ciscospark.com/bot-detail.html). Your bots bearer token will be available after you've created it.
 
-<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/gobot-setup-01.png" align="center" width="650"/>
+<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/gobot-setup-01.png" align="center" width="750"/>
 
 For your room ID, simply add the new bot to a room and note down the room ID from the browser URL.
 
-<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/gobot-setup-02.png" align="center" width="650"/>
+<img src="https://raw.githubusercontent.com/t04glovern/gocd-spark-build-notifier/master/img/gobot-setup-02.png" align="center" width="600"/>
 
 ## Pipeline Rules
 By default the plugin pushes a note about all failed stages across all pipelines to Spark. You have fine grain control over this operation.
