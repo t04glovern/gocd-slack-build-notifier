@@ -40,11 +40,6 @@ gocd.spark {
   display-console-log-links = true
   displayMaterialChanges = true
   process-all-rules = true
-  proxy {
-    hostname = "localhost"
-    port = "5555"
-    type = "socks" # acceptable values are http / socks
-  }
 }
 ```
 - `login` - Login for a Go user who is authorized to access the REST API.
@@ -58,10 +53,6 @@ gocd.spark {
 - `displayMaterialChanges` - Display material changes in the notification (git revisions for example). Defaults to true, set to false if you want to hide.
 - `process-all-rules` - If true, all matching rules are applied instead of just the first.
 - `truncate-changes` - If true, displays only the latest 5 changes for all the materials. (Default: true)
-- `proxy` - Specify proxy related settings for the plugin.
-  - `proxy.hostname` - Proxy Host
-  - `proxy.port` - Proxy Port
-  - `proxy.type` - `socks` or `http` are the only accepted values.
 
 ## Pipeline Rules
 By default the plugin pushes a note about all failed stages across all pipelines to Spark. You have fine grain control over this operation.
@@ -91,7 +82,7 @@ gocd.spark {
 - `stage` - Regex to match the stage name
 - `group` - Regex to match the pipeline group name
 - `state` - State of the pipeline at which we should send a notification. You can provide multiple values separated by pipe (`|`) symbol. Valid values are passed, failed, cancelled, building, fixed, broken or all.
-- `channel` - (Optional) channel where we should send the spark notification. This setting for a rule overrides the global setting
+- `room` - (Optional) room where we should send the spark notification. This setting for a rule overrides the global setting
 - `owners` - (Optional) list of spark user handles who must be tagged in the message upon notifications
 - `webhookUrl` - (Optional) Use this webhook url instead of the global one. Useful if you're using multiple spark teams.
 
