@@ -7,6 +7,7 @@
     <a href="https://www.android.com/" target="_blank"><img src="https://img.shields.io/badge/Platform-Java-blue.svg" alt="License"></a>
     <a href="https://travis-ci.org/t04glovern/gocd-spark-build-notifier" target="_blank"><img src="https://travis-ci.org/t04glovern/gocd-spark-build-notifier.svg?branch=master" alt="Build Status"></a>
     <a href="https://codecov.io/gh/t04glovern/gocd-spark-build-notifier"><img src="https://codecov.io/gh/t04glovern/gocd-spark-build-notifier/branch/master/graph/badge.svg" />
+    <a href="https://snyk.io/test/github/t04glovern/gocd-spark-build-notifier?targetFile=pom.xml"><img src="https://snyk.io/test/github/t04glovern/gocd-spark-build-notifier/badge.svg?targetFile=pom.xml" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/t04glovern/gocd-spark-build-notifier?targetFile=pom.xml" style="max-width:100%;"></a>
 </a>
 </div>
 
