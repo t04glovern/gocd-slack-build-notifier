@@ -3,6 +3,7 @@ package com.nathanglover.gocd.spark.jsonapi;
 import com.google.gson.annotations.SerializedName;
 
 public class Job {
+
     @SerializedName("name")
     public String name;
 

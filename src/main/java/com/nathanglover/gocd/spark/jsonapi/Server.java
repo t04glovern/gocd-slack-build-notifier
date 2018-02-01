@@ -1,22 +1,22 @@
 package com.nathanglover.gocd.spark.jsonapi;
 
-import com.google.gson.JsonElement;
-import com.thoughtworks.go.plugin.api.logging.Logger;
-import com.nathanglover.gocd.spark.ruleset.Rules;
+import static in.ashwanthkumar.utils.lang.StringUtils.isNotEmpty;
 
-import javax.xml.bind.DatatypeConverter;
+import com.google.gson.JsonElement;
+import com.nathanglover.gocd.spark.ruleset.Rules;
+import com.thoughtworks.go.plugin.api.logging.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import static in.ashwanthkumar.utils.lang.StringUtils.isNotEmpty;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Actual methods for contacting the remote server.
  */
 public class Server {
+
     private Logger LOG = Logger.getLoggerFor(Server.class);
 
     // Contains authentication credentials, etc.
@@ -37,7 +37,7 @@ public class Server {
     }
 
     JsonElement getUrl(URL url)
-            throws IOException {
+        throws IOException {
         URL normalizedUrl;
         try {
             normalizedUrl = url.toURI().normalize().toURL();
@@ -52,7 +52,7 @@ public class Server {
         if (isNotEmpty(mRules.getGoLogin()) && isNotEmpty(mRules.getGoPassword())) {
             String userpass = mRules.getGoLogin() + ":" + mRules.getGoPassword();
             String basicAuth = "Basic "
-                    + DatatypeConverter.printBase64Binary(userpass.getBytes());
+                + DatatypeConverter.printBase64Binary(userpass.getBytes());
             request.setRequestProperty("Authorization", basicAuth);
         }
 
@@ -65,9 +65,9 @@ public class Server {
      * Get the recent history of a pipeline.
      */
     public History getPipelineHistory(String pipelineName)
-            throws MalformedURLException, IOException {
+        throws MalformedURLException, IOException {
         URL url = new URL(String.format("%s/go/api/pipelines/%s/history",
-                mRules.getGoAPIServerHost(), pipelineName));
+            mRules.getGoAPIServerHost(), pipelineName));
         JsonElement json = getUrl(url);
         return httpConnectionUtil.convertResponse(json, History.class);
     }
@@ -76,9 +76,9 @@ public class Server {
      * Get a specific instance of a pipeline.
      */
     public Pipeline getPipelineInstance(String pipelineName, int pipelineCounter)
-            throws MalformedURLException, IOException {
+        throws MalformedURLException, IOException {
         URL url = new URL(String.format("%s/go/api/pipelines/%s/instance/%d",
-                mRules.getGoAPIServerHost(), pipelineName, pipelineCounter));
+            mRules.getGoAPIServerHost(), pipelineName, pipelineCounter));
         JsonElement json = getUrl(url);
         return httpConnectionUtil.convertResponse(json, Pipeline.class);
     }

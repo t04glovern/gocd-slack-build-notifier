@@ -234,19 +234,20 @@ public class Rules {
         return pipelineListener;
     }
 
-    public List<PipelineRule> find(final String pipeline, final String stage, final String group, final String pipelineStatus) {
+    public List<PipelineRule> find(final String pipeline, final String stage, final String group,
+        final String pipelineStatus) {
         Predicate<PipelineRule> predicate = new Predicate<PipelineRule>() {
             public Boolean apply(PipelineRule input) {
                 return input.matches(pipeline, stage, group, pipelineStatus);
             }
         };
 
-        if(processAllRules) {
+        if (processAllRules) {
             return Lists.filter(pipelineRules, predicate);
         } else {
             List<PipelineRule> found = new ArrayList<PipelineRule>();
             Option<PipelineRule> match = Lists.find(pipelineRules, predicate);
-            if(match.isDefined()) {
+            if (match.isDefined()) {
                 found.add(match.get());
             }
             return found;
@@ -311,14 +312,15 @@ public class Rules {
         }
 
         boolean truncateChanges = true;
-        if(config.hasPath("truncate-changes")) {
+        if (config.hasPath("truncate-changes")) {
             truncateChanges = config.getBoolean("truncate-changes");
         }
 
         Proxy proxy = null;
         if (config.hasPath("proxy")) {
             Config proxyConfig = config.getConfig("proxy");
-            if (proxyConfig.hasPath("hostname") && proxyConfig.hasPath("port") && proxyConfig.hasPath("type")) {
+            if (proxyConfig.hasPath("hostname") && proxyConfig.hasPath("port") && proxyConfig
+                .hasPath("type")) {
                 String hostname = proxyConfig.getString("hostname");
                 int port = proxyConfig.getInt("port");
                 String type = proxyConfig.getString("type").toUpperCase();
@@ -329,30 +331,31 @@ public class Rules {
 
         final PipelineRule defaultRule = PipelineRule.fromConfig(config.getConfig("default"), room);
         List<PipelineRule> pipelineRules = Lists.map(config.getConfigList(
-                "pipelines"), input -> merge(PipelineRule.fromConfig(input), defaultRule
+            "pipelines"), input -> merge(PipelineRule.fromConfig(input), defaultRule
         ));
 
         Rules rules = new Rules()
-                .setEnabled(isEnabled)
-                .setSparkWebHookUrl(webhookUrl)
-                .setSparkWebHookSecret(webhookSecret)
-                .setSparkWebHookName(webhookName)
-                .setSparkBearerToken(bearerToken)
-                .setSparkRoom(room)
-                .setSparkDisplayName(displayName)
-                .setSparkUserIconURL(iconURL)
-                .setGoServerHost(serverHost)
-                .setGoAPIServerHost(apiServerHost)
-                .setGoLogin(login)
-                .setGoPassword(password)
-                .setDisplayConsoleLogLinks(displayConsoleLogLinks)
-                .setDisplayMaterialChanges(displayMaterialChanges)
-                .setProcessAllRules(processAllRules)
-                .setTruncateChanges(truncateChanges)
-                .setProxy(proxy)
-                .setPipelineRules(pipelineRules);
+            .setEnabled(isEnabled)
+            .setSparkWebHookUrl(webhookUrl)
+            .setSparkWebHookSecret(webhookSecret)
+            .setSparkWebHookName(webhookName)
+            .setSparkBearerToken(bearerToken)
+            .setSparkRoom(room)
+            .setSparkDisplayName(displayName)
+            .setSparkUserIconURL(iconURL)
+            .setGoServerHost(serverHost)
+            .setGoAPIServerHost(apiServerHost)
+            .setGoLogin(login)
+            .setGoPassword(password)
+            .setDisplayConsoleLogLinks(displayConsoleLogLinks)
+            .setDisplayMaterialChanges(displayMaterialChanges)
+            .setProcessAllRules(processAllRules)
+            .setTruncateChanges(truncateChanges)
+            .setProxy(proxy)
+            .setPipelineRules(pipelineRules);
         try {
-            rules.pipelineListener = Class.forName(config.getString("listener")).asSubclass(PipelineListener.class).getConstructor(Rules.class).newInstance(rules);
+            rules.pipelineListener = Class.forName(config.getString("listener"))
+                .asSubclass(PipelineListener.class).getConstructor(Rules.class).newInstance(rules);
         } catch (Exception e) {
             LOGGER.error("Exception while initializing pipeline listener", e);
             throw new RuntimeException(e);

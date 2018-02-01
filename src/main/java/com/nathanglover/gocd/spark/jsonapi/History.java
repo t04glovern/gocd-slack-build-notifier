@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName;
 import com.thoughtworks.go.plugin.api.logging.Logger;
 
 public class History {
-    private Logger LOG = Logger.getLoggerFor(History.class);
 
     @SerializedName("pipelines")
     public Pipeline[] pipelines;
+    private Logger LOG = Logger.getLoggerFor(History.class);
 
     /**
      * Find the most recent run of the specified stage _before_ this one.
      */
     public Stage previousRun(int pipelineCounter, String stageName, int stageCounter) {
         LOG.debug(String.format("Looking for stage before %d/%s/%d",
-                pipelineCounter, stageName, stageCounter));
+            pipelineCounter, stageName, stageCounter));
 
         // Note that pipelines and stages are stored in reverse
         // chronological order.
@@ -23,18 +23,20 @@ public class History {
             for (int j = 0; j < pipeline.stages.length; j++) {
                 Stage stage = pipeline.stages[j];
                 LOG.debug(String.format("Checking %d/%s/%d",
-                        pipeline.counter, stage.name, stage.counter));
+                    pipeline.counter, stage.name, stage.counter));
 
                 if (stage.name.equals(stageName)) {
 
                     // Same pipeline run, earlier instance of stage.
                     if (pipeline.counter == pipelineCounter &&
-                            stage.counter < stageCounter)
+                        stage.counter < stageCounter) {
                         return stage;
+                    }
 
                     // Previous pipeline run.
-                    if (pipeline.counter < pipelineCounter)
+                    if (pipeline.counter < pipelineCounter) {
                         return stage;
+                    }
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.nathanglover.gocd.spark.jsonapi;
 import com.google.gson.annotations.SerializedName;
 
 public class Modification {
+
     @SerializedName("id")
     public int id;
 
@@ -21,12 +22,13 @@ public class Modification {
     //"email_address": null
 
     /**
-     * Return a shortened form of the comment, or null if we have no comment.
-     * Designed to reduce git commit messages to just their summary line.
+     * Return a shortened form of the comment, or null if we have no comment. Designed to reduce git
+     * commit messages to just their summary line.
      */
     public String summarizeComment() {
-        if (comment == null)
+        if (comment == null) {
             return null;
+        }
 
         String[] lines = comment.split("\\r?\\n");
         return lines[0];
@@ -45,15 +47,19 @@ public class Modification {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Modification other = (Modification) obj;
-        if (id != other.id)
+        if (id != other.id) {
             return false;
+        }
         return true;
     }
 }

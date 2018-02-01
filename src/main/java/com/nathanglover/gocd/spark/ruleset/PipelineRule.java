@@ -13,6 +13,7 @@ import java.util.Set;
 import static in.ashwanthkumar.utils.lang.StringUtils.isEmpty;
 
 public class PipelineRule {
+
     private String nameRegex;
     private String stageRegex;
     private String groupRegex;
@@ -102,11 +103,12 @@ public class PipelineRule {
         return this;
     }
 
-    public boolean matches(String pipeline, String stage, String group, final String pipelineState) {
+    public boolean matches(String pipeline, String stage, String group,
+        final String pipelineState) {
         return pipeline.matches(nameRegex)
-                && stage.matches(stageRegex)
-                && matchesGroup(group)
-                && Iterables.exists(status, hasStateMatching(pipelineState));
+            && stage.matches(stageRegex)
+            && matchesGroup(group)
+            && Iterables.exists(status, hasStateMatching(pipelineState));
     }
 
     private boolean matchesGroup(String group) {
@@ -124,18 +126,36 @@ public class PipelineRule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         PipelineRule that = (PipelineRule) o;
 
-        if (room != null ? !room.equals(that.room) : that.room != null) return false;
-        if (nameRegex != null ? !nameRegex.equals(that.nameRegex) : that.nameRegex != null) return false;
-        if (groupRegex != null ? !groupRegex.equals(that.groupRegex) : that.groupRegex != null) return false;
-        if (stageRegex != null ? !stageRegex.equals(that.stageRegex) : that.stageRegex != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (owners != null ? !owners.equals(that.owners) : that.owners != null) return false;
-        if (webhookUrl != null ? !webhookUrl.equals(that.webhookUrl) : that.webhookUrl != null) return false;
+        if (room != null ? !room.equals(that.room) : that.room != null) {
+            return false;
+        }
+        if (nameRegex != null ? !nameRegex.equals(that.nameRegex) : that.nameRegex != null) {
+            return false;
+        }
+        if (groupRegex != null ? !groupRegex.equals(that.groupRegex) : that.groupRegex != null) {
+            return false;
+        }
+        if (stageRegex != null ? !stageRegex.equals(that.stageRegex) : that.stageRegex != null) {
+            return false;
+        }
+        if (status != null ? !status.equals(that.status) : that.status != null) {
+            return false;
+        }
+        if (owners != null ? !owners.equals(that.owners) : that.owners != null) {
+            return false;
+        }
+        if (webhookUrl != null ? !webhookUrl.equals(that.webhookUrl) : that.webhookUrl != null) {
+            return false;
+        }
 
         return true;
     }
@@ -155,14 +175,14 @@ public class PipelineRule {
     @Override
     public String toString() {
         return "PipelineRule{" +
-                "nameRegex='" + nameRegex + '\'' +
-                ", groupRegex='" + groupRegex + '\'' +
-                ", stageRegex='" + stageRegex + '\'' +
-                ", room='" + room + '\'' +
-                ", status=" + status +
-                ", owners=" + owners +
-                ", webhookUrl=" + webhookUrl +
-                '}';
+            "nameRegex='" + nameRegex + '\'' +
+            ", groupRegex='" + groupRegex + '\'' +
+            ", stageRegex='" + stageRegex + '\'' +
+            ", room='" + room + '\'' +
+            ", status=" + status +
+            ", owners=" + owners +
+            ", webhookUrl=" + webhookUrl +
+            '}';
     }
 
     public static PipelineRule fromConfig(Config config) {
@@ -190,12 +210,13 @@ public class PipelineRule {
             pipelineRule.setWebhookUrl(config.getString("webhookUrl"));
         }
         if (config.hasPath("owners")) {
-            List<String> nonEmptyOwners = Lists.filter(config.getStringList("owners"), new Predicate<String>() {
-                @Override
-                public Boolean apply(String input) {
-                    return StringUtils.isNotEmpty(input);
-                }
-            });
+            List<String> nonEmptyOwners = Lists
+                .filter(config.getStringList("owners"), new Predicate<String>() {
+                    @Override
+                    public Boolean apply(String input) {
+                        return StringUtils.isNotEmpty(input);
+                    }
+                });
             pipelineRule.getOwners().addAll(nonEmptyOwners);
         }
 

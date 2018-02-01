@@ -3,10 +3,10 @@ package com.nathanglover.gocd.spark.jsonapi;
 import com.google.gson.annotations.SerializedName;
 import in.ashwanthkumar.utils.collections.Lists;
 import in.ashwanthkumar.utils.func.Function;
-
 import java.util.List;
 
 public class Stage {
+
     @SerializedName("id")
     public int id;
 

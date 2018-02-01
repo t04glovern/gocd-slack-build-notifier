@@ -12,14 +12,14 @@ abstract public class AbstractNotificationPlugin {
     /**
      * Create a configuration field for the plugin.
      *
-     * @param displayName  Name of the configuration
+     * @param displayName Name of the configuration
      * @param defaultValue Default value if none provided
      * @param displayOrder Order in which it should be displayed
-     * @param required     If the field is mandatory.
-     * @param secure       If the data in the field should be stored encrypted.
-     * @return
+     * @param required If the field is mandatory.
+     * @param secure If the data in the field should be stored encrypted.
      */
-    protected Map<String, Object> configField(String displayName, String defaultValue, String displayOrder, boolean required, boolean secure) {
+    protected Map<String, Object> configField(String displayName, String defaultValue,
+        String displayOrder, boolean required, boolean secure) {
         Map<String, Object> serverUrlParams = new HashMap<>();
         serverUrlParams.put("display-name", displayName);
         serverUrlParams.put("display-value", defaultValue);
@@ -30,7 +30,8 @@ abstract public class AbstractNotificationPlugin {
     }
 
     protected GoPluginApiResponse renderJSON(final int responseCode, final Object response) {
-        final String json = response == null ? null : new GsonBuilder().disableHtmlEscaping().create().toJson(response);
+        final String json = response == null ? null
+            : new GsonBuilder().disableHtmlEscaping().create().toJson(response);
         DefaultGoPluginApiResponse pluginApiResponse = new DefaultGoPluginApiResponse(responseCode);
         pluginApiResponse.setResponseBody(json);
         return pluginApiResponse;

@@ -7,6 +7,7 @@ import com.typesafe.config.ConfigFactory;
 import java.io.File;
 
 public class RulesReader {
+
     private Logger LOG = Logger.getLoggerFor(RulesReader.class);
 
     public static Rules read() {
@@ -22,8 +23,11 @@ public class RulesReader {
     }
 
     protected Rules load(Config config) {
-        Config envThenSystem = ConfigFactory.systemEnvironment().withFallback(ConfigFactory.systemProperties());
-        Config configWithFallback = config.withFallback(ConfigFactory.load(getClass().getClassLoader())).resolveWith(envThenSystem);
+        Config envThenSystem = ConfigFactory.systemEnvironment()
+            .withFallback(ConfigFactory.systemProperties());
+        Config configWithFallback = config
+            .withFallback(ConfigFactory.load(getClass().getClassLoader()))
+            .resolveWith(envThenSystem);
         return Rules.fromConfig(configWithFallback.getConfig("gocd.spark"));
     }
 

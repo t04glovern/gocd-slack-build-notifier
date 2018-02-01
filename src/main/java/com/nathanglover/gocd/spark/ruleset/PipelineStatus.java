@@ -9,7 +9,8 @@ public enum PipelineStatus {
      */
     BUILDING {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             listener.onBuilding(rule, message);
         }
     },
@@ -18,7 +19,8 @@ public enum PipelineStatus {
      */
     PASSED {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             listener.onPassed(rule, message);
         }
     },
@@ -27,7 +29,8 @@ public enum PipelineStatus {
      */
     FAILED {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             listener.onFailed(rule, message);
         }
     },
@@ -36,7 +39,8 @@ public enum PipelineStatus {
      */
     BROKEN {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             listener.onBroken(rule, message);
         }
     },
@@ -45,7 +49,8 @@ public enum PipelineStatus {
      */
     FIXED {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             listener.onFixed(rule, message);
         }
     },
@@ -54,10 +59,11 @@ public enum PipelineStatus {
      */
     UNKNOWN {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             /*
-            * No-op - We never report this status.
-            */
+             * No-op - We never report this status.
+             */
         }
     },
     /**
@@ -65,7 +71,8 @@ public enum PipelineStatus {
      */
     CANCELLED {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             listener.onCancelled(rule, message);
         }
     },
@@ -74,10 +81,11 @@ public enum PipelineStatus {
      */
     ALL {
         @Override
-        public void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception {
+        public void handle(PipelineListener listener, PipelineRule rule,
+            GoNotificationMessage message) throws Exception {
             /*
-            * No-op - Since we use this flag only to denote handle all states but not the actual state itself.
-            */
+             * No-op - Since we use this flag only to denote handle all states but not the actual state itself.
+             */
         }
     };
 
@@ -85,5 +93,6 @@ public enum PipelineStatus {
         return this == ALL || this == PipelineStatus.valueOf(state.toUpperCase());
     }
 
-    public abstract void handle(PipelineListener listener, PipelineRule rule, GoNotificationMessage message) throws Exception;
+    public abstract void handle(PipelineListener listener, PipelineRule rule,
+        GoNotificationMessage message) throws Exception;
 }

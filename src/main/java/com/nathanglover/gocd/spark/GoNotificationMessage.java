@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public class GoNotificationMessage {
+
     private Logger LOG = Logger.getLoggerFor(GoNotificationMessage.class);
 
     private final ServerFactory serverFactory;
@@ -26,19 +27,19 @@ public class GoNotificationMessage {
     }
 
     /**
-     * Raised when we can't find information about our build in the array
-     * returned by the server.
+     * Raised when we can't find information about our build in the array returned by the server.
      */
     static public class BuildDetailsNotFoundException extends Exception {
+
         public BuildDetailsNotFoundException(String pipelineName,
-                                             int pipelineCounter)
-        {
+            int pipelineCounter) {
             super(String.format("could not find details for %s/%d",
-                                pipelineName, pipelineCounter));
+                pipelineName, pipelineCounter));
         }
     }
 
     static class StageInfo {
+
         @SerializedName("name")
         String name;
 
@@ -59,6 +60,7 @@ public class GoNotificationMessage {
     }
 
     static class PipelineInfo {
+
         @SerializedName("name")
         String name;
 
@@ -84,11 +86,14 @@ public class GoNotificationMessage {
     private History mRecentPipelineHistory;
 
     public String goServerUrl(String host) throws URISyntaxException {
-        return new URI(String.format("%s/go/pipelines/%s/%s/%s/%s", host, pipeline.name, pipeline.counter, pipeline.stage.name, pipeline.stage.counter)).normalize().toASCIIString();
+        return new URI(String
+            .format("%s/go/pipelines/%s/%s/%s/%s", host, pipeline.name, pipeline.counter,
+                pipeline.stage.name, pipeline.stage.counter)).normalize().toASCIIString();
     }
 
     public String fullyQualifiedJobName() {
-        return pipeline.name + "/" + pipeline.counter + "/" + pipeline.stage.name + "/" + pipeline.stage.counter;
+        return pipeline.name + "/" + pipeline.counter + "/" + pipeline.stage.name + "/"
+            + pipeline.stage.counter;
     }
 
     public String getPipelineName() {
@@ -128,12 +133,11 @@ public class GoNotificationMessage {
     }
 
     /**
-     * Fetch the full history of this pipeline from the server.  We can't
-     * get specify a specific version, unfortunately.
+     * Fetch the full history of this pipeline from the server.  We can't get specify a specific
+     * version, unfortunately.
      */
     public History fetchRecentPipelineHistory(Rules rules)
-        throws URISyntaxException, IOException
-    {
+        throws URISyntaxException, IOException {
         if (mRecentPipelineHistory == null) {
             Server server = serverFactory.getServer(rules);
             mRecentPipelineHistory = server.getPipelineHistory(pipeline.name);
@@ -142,8 +146,7 @@ public class GoNotificationMessage {
     }
 
     public Pipeline fetchDetailsForBuild(Rules rules, int counter)
-        throws URISyntaxException, IOException, BuildDetailsNotFoundException
-    {
+        throws URISyntaxException, IOException, BuildDetailsNotFoundException {
         History history = fetchRecentPipelineHistory(rules);
         if (history != null) {
             Pipeline[] pipelines = history.pipelines;
@@ -151,15 +154,15 @@ public class GoNotificationMessage {
             // we can find the build we want.
             for (int i = 0, size = pipelines.length; i < size; i++) {
                 Pipeline build = pipelines[i];
-                if (build.counter == counter)
+                if (build.counter == counter) {
                     return build;
+                }
             }
         }
         throw new BuildDetailsNotFoundException(getPipelineName(), counter);
     }
 
-    public void tryToFixStageResult(Rules rules)
-    {
+    public void tryToFixStageResult(Rules rules) {
         String currentStatus = pipeline.stage.state.toUpperCase();
         String currentResult = pipeline.stage.result.toUpperCase();
         if (currentStatus.equals("BUILDING") && currentResult.equals("UNKNOWN")) {
@@ -168,28 +171,29 @@ public class GoNotificationMessage {
         }
         // We only need to double-check certain messages; the rest are
         // trusty-worthy.
-        if (!currentResult.equals("PASSED") && !currentResult.equals("FAILED"))
+        if (!currentResult.equals("PASSED") && !currentResult.equals("FAILED")) {
             return;
+        }
 
         // Fetch our history.  If we can't get it, just give up; this is a
         // low-priority tweak.
         History history = null;
         try {
             history = fetchRecentPipelineHistory(rules);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOG.warn(String.format("Error getting pipeline history: " +
-                                   e.getMessage()));
+                e.getMessage()));
             return;
         }
 
         // Figure out whether the previous run of this stage passed or failed.
         Stage previous = history.previousRun(Integer.parseInt(pipeline.counter),
-                                             pipeline.stage.name,
-                                             Integer.parseInt(pipeline.stage.counter));
+            pipeline.stage.name,
+            Integer.parseInt(pipeline.stage.counter));
         if (previous == null || StringUtils.isEmpty(previous.result)) {
             LOG.info("Couldn't find any previous run of " +
-                     pipeline.name + "/" + pipeline.counter + "/" +
-                     pipeline.stage.name + "/" + pipeline.stage.counter);
+                pipeline.name + "/" + pipeline.counter + "/" +
+                pipeline.stage.name + "/" + pipeline.stage.counter);
             return;
         }
         String previousResult = previous.result.toUpperCase();
@@ -200,22 +204,21 @@ public class GoNotificationMessage {
         // only, but our callers should all be using toUpperCase on it in
         // any event.
         //LOG.info("current: "+currentResult + ", previous: "+previousResult);
-        if (currentResult.equals("PASSED") && !previousResult.equals("PASSED"))
+        if (currentResult.equals("PASSED") && !previousResult.equals("PASSED")) {
             pipeline.stage.result = "Fixed";
-        else if (currentResult.equals("FAILED") &&
-                 previousResult.equals("PASSED"))
+        } else if (currentResult.equals("FAILED") &&
+            previousResult.equals("PASSED")) {
             pipeline.stage.result = "Broken";
+        }
     }
 
     public Pipeline fetchDetails(Rules rules)
-        throws URISyntaxException, IOException, BuildDetailsNotFoundException
-    {
+        throws URISyntaxException, IOException, BuildDetailsNotFoundException {
         return fetchDetailsForBuild(rules, Integer.parseInt(getPipelineCounter()));
     }
 
     public List<MaterialRevision> fetchChanges(Rules rules)
-        throws URISyntaxException, IOException
-    {
+        throws URISyntaxException, IOException {
         Server server = serverFactory.getServer(rules);
         Pipeline pipelineInstance =
             server.getPipelineInstance(pipeline.name, Integer.parseInt(pipeline.counter));
