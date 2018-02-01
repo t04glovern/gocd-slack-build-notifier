@@ -1,21 +1,40 @@
 package com.nathanglover.gocd.spark;
 
-import com.nathanglover.gocd.spark.jsonapi.*;
-import com.nathanglover.gocd.spark.util.TestUtils;
-import com.nathanglover.gocd.spark.ruleset.Rules;
-import in.ashwanthkumar.utils.collections.Lists;
-import org.junit.Test;
-
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.nathanglover.gocd.spark.jsonapi.BuildCause;
+import com.nathanglover.gocd.spark.jsonapi.History;
+import com.nathanglover.gocd.spark.jsonapi.Material;
+import com.nathanglover.gocd.spark.jsonapi.MaterialRevision;
+import com.nathanglover.gocd.spark.jsonapi.Modification;
+import com.nathanglover.gocd.spark.jsonapi.Pipeline;
+import com.nathanglover.gocd.spark.jsonapi.Server;
+import com.nathanglover.gocd.spark.ruleset.Rules;
+import com.nathanglover.gocd.spark.util.TestUtils;
+import in.ashwanthkumar.utils.collections.Lists;
+import java.util.List;
+import org.junit.Test;
+
 public class GoNotificationMessageTest {
 
     private static final String PIPELINE_NAME = "pipeline";
+
+    private static Pipeline pipeline(String name, int counter) {
+        Pipeline pipeline = new Pipeline();
+        pipeline.name = name;
+        pipeline.counter = counter;
+        return pipeline;
+    }
+
+    private static GoNotificationMessage.PipelineInfo info(String name, int counter) {
+        GoNotificationMessage.PipelineInfo pipeline = new GoNotificationMessage.PipelineInfo();
+        pipeline.counter = Integer.toString(counter);
+        pipeline.name = name;
+        return pipeline;
+    }
 
     @Test
     public void shouldFetchPipelineDetails() throws Exception {
@@ -23,17 +42,17 @@ public class GoNotificationMessageTest {
 
         History pipelineHistory = new History();
         pipelineHistory.pipelines = new Pipeline[]{
-                pipeline(PIPELINE_NAME, 8),
-                pipeline(PIPELINE_NAME, 9),
-                pipeline(PIPELINE_NAME, 10),
-                pipeline(PIPELINE_NAME, 11),
-                pipeline(PIPELINE_NAME, 12)
+            pipeline(PIPELINE_NAME, 8),
+            pipeline(PIPELINE_NAME, 9),
+            pipeline(PIPELINE_NAME, 10),
+            pipeline(PIPELINE_NAME, 11),
+            pipeline(PIPELINE_NAME, 12)
         };
         when(server.getPipelineHistory(PIPELINE_NAME)).thenReturn(pipelineHistory);
 
         GoNotificationMessage message = new GoNotificationMessage(
-                TestUtils.createMockServerFactory(server),
-                info(PIPELINE_NAME, 10)
+            TestUtils.createMockServerFactory(server),
+            info(PIPELINE_NAME, 10)
         );
 
         Pipeline result = message.fetchDetails(new Rules());
@@ -48,14 +67,14 @@ public class GoNotificationMessageTest {
 
         History pipelineHistory = new History();
         pipelineHistory.pipelines = new Pipeline[]{
-                pipeline(PIPELINE_NAME, 8),
-                pipeline(PIPELINE_NAME, 9)
+            pipeline(PIPELINE_NAME, 8),
+            pipeline(PIPELINE_NAME, 9)
         };
         when(server.getPipelineHistory(PIPELINE_NAME)).thenReturn(pipelineHistory);
 
         GoNotificationMessage message = new GoNotificationMessage(
-                TestUtils.createMockServerFactory(server),
-                info(PIPELINE_NAME, 10)
+            TestUtils.createMockServerFactory(server),
+            info(PIPELINE_NAME, 10)
         );
 
         message.fetchDetails(new Rules());
@@ -67,13 +86,13 @@ public class GoNotificationMessageTest {
 
         History pipelineHistory = new History();
         pipelineHistory.pipelines = new Pipeline[]{
-                pipeline("something-different", 10)
+            pipeline("something-different", 10)
         };
         when(server.getPipelineHistory("something-different")).thenReturn(pipelineHistory);
 
         GoNotificationMessage message = new GoNotificationMessage(
-                TestUtils.createMockServerFactory(server),
-                info(PIPELINE_NAME, 10)
+            TestUtils.createMockServerFactory(server),
+            info(PIPELINE_NAME, 10)
         );
 
         message.fetchDetails(new Rules());
@@ -103,7 +122,7 @@ public class GoNotificationMessageTest {
 
             pipelineRevision.modifications = Lists.of(modification);
             pipeline1.buildCause.materialRevisions = new MaterialRevision[]{
-                    leafRevision, pipelineRevision
+                leafRevision, pipelineRevision
             };
         }
         Pipeline pipeline2 = new Pipeline();
@@ -117,34 +136,20 @@ public class GoNotificationMessageTest {
             leafRevision.changed = true;
 
             pipeline2.buildCause.materialRevisions = new MaterialRevision[]{
-                    leafRevision
+                leafRevision
             };
         }
         when(server.getPipelineInstance("pipeline1", 10)).thenReturn(pipeline1);
         when(server.getPipelineInstance("pipeline2", 11)).thenReturn(pipeline2);
 
         GoNotificationMessage message = new GoNotificationMessage(
-                TestUtils.createMockServerFactory(server),
-                info("pipeline1", 10)
+            TestUtils.createMockServerFactory(server),
+            info("pipeline1", 10)
         );
 
         List<MaterialRevision> revisions = message.fetchChanges(new Rules());
 
         assertThat(revisions.size(), is(2));
-    }
-
-    private static Pipeline pipeline(String name, int counter) {
-        Pipeline pipeline = new Pipeline();
-        pipeline.name = name;
-        pipeline.counter = counter;
-        return pipeline;
-    }
-
-    private static GoNotificationMessage.PipelineInfo info(String name, int counter) {
-        GoNotificationMessage.PipelineInfo pipeline = new GoNotificationMessage.PipelineInfo();
-        pipeline.counter = Integer.toString(counter);
-        pipeline.name = name;
-        return pipeline;
     }
 
 }

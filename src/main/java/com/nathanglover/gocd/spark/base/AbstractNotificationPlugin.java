@@ -3,7 +3,6 @@ package com.nathanglover.gocd.spark.base;
 import com.google.gson.GsonBuilder;
 import com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse;
 import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
-
 import java.util.HashMap;
 import java.util.Map;
 

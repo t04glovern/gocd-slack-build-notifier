@@ -1,14 +1,15 @@
 package com.nathanglover.gocd.spark.ruleset;
 
-import in.ashwanthkumar.utils.collections.Sets;
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
+import in.ashwanthkumar.utils.collections.Sets;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
 
 public class RulesReaderTest {
 
@@ -24,19 +25,19 @@ public class RulesReaderTest {
         assertThat(rules.getDisplayMaterialChanges(), is(false));
 
         PipelineRule pipelineRule1 = new PipelineRule()
-                .setNameRegex("gocd-spark-build-notifier")
-                .setStageRegex(".*")
-                .setGroupRegex(".*")
-                .setRoom("#gocd")
-                .setStatus(Sets.of(PipelineStatus.FAILED));
+            .setNameRegex("gocd-spark-build-notifier")
+            .setStageRegex(".*")
+            .setGroupRegex(".*")
+            .setRoom("#gocd")
+            .setStatus(Sets.of(PipelineStatus.FAILED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule1));
 
         PipelineRule pipelineRule2 = new PipelineRule()
-                .setNameRegex("my-java-utils")
-                .setStageRegex("build")
-                .setGroupRegex("ci")
-                .setRoom("#gocd-build")
-                .setStatus(Sets.of(PipelineStatus.FAILED));
+            .setNameRegex("my-java-utils")
+            .setStageRegex("build")
+            .setGroupRegex("ci")
+            .setRoom("#gocd-build")
+            .setStatus(Sets.of(PipelineStatus.FAILED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule2));
 
         assertThat(rules.getPipelineListener(), notNullValue());
@@ -63,11 +64,13 @@ public class RulesReaderTest {
         assertThat(rules.getDisplayMaterialChanges(), is(true));
 
         PipelineRule pipelineRule = new PipelineRule()
-                .setNameRegex(".*")
-                .setStageRegex(".*")
-                .setGroupRegex(".*")
-                .setRoom("#build")
-                .setStatus(Sets.of(PipelineStatus.CANCELLED, PipelineStatus.BROKEN, PipelineStatus.FAILED, PipelineStatus.FIXED));
+            .setNameRegex(".*")
+            .setStageRegex(".*")
+            .setGroupRegex(".*")
+            .setRoom("#build")
+            .setStatus(
+                Sets.of(PipelineStatus.CANCELLED, PipelineStatus.BROKEN, PipelineStatus.FAILED,
+                    PipelineStatus.FIXED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule));
 
         assertThat(rules.getPipelineListener(), notNullValue());
@@ -83,12 +86,12 @@ public class RulesReaderTest {
         assertThat(rules.getPipelineRules().size(), is(1));
 
         PipelineRule pipelineRule = new PipelineRule()
-                .setNameRegex(".*")
-                .setStageRegex(".*")
-                .setGroupRegex(".*")
-                .setRoom("#foo")
-                .setStatus(Sets.of(PipelineStatus.FAILED))
-                .setWebhookUrl("https://api.ciscospark.com/v1/webhooks/for-pipeline");
+            .setNameRegex(".*")
+            .setStageRegex(".*")
+            .setGroupRegex(".*")
+            .setRoom("#foo")
+            .setStatus(Sets.of(PipelineStatus.FAILED))
+            .setWebhookUrl("https://api.ciscospark.com/v1/webhooks/for-pipeline");
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule));
 
         assertThat(rules.getPipelineListener(), notNullValue());
@@ -105,11 +108,11 @@ public class RulesReaderTest {
         assertThat(rules.getGoLogin(), is(System.getenv("HOME")));
 
         PipelineRule pipelineRule = new PipelineRule()
-                .setNameRegex(".*")
-                .setStageRegex(".*")
-                .setGroupRegex(".*")
-                .setRoom("#foo")
-                .setStatus(Sets.of(PipelineStatus.FAILED));
+            .setNameRegex(".*")
+            .setStageRegex(".*")
+            .setGroupRegex(".*")
+            .setRoom("#foo")
+            .setStatus(Sets.of(PipelineStatus.FAILED));
         assertThat(rules.getPipelineRules(), CoreMatchers.hasItem(pipelineRule));
 
         assertThat(rules.getPipelineListener(), notNullValue());

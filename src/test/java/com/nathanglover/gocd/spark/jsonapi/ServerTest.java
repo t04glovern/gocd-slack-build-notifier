@@ -1,18 +1,20 @@
 package com.nathanglover.gocd.spark.jsonapi;
 
-import com.nathanglover.gocd.spark.ruleset.Rules;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.nathanglover.gocd.spark.ruleset.Rules;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 public class ServerTest {
 
@@ -28,9 +30,10 @@ public class ServerTest {
 
         ArgumentCaptor<URL> url = ArgumentCaptor.forClass(URL.class);
         verify(httpConnectionUtil).getConnection(
-                url.capture()
+            url.capture()
         );
-        assertThat(url.getValue().toString(), is("https://example.org/go/api/pipelines/pipeline-test/history"));
+        assertThat(url.getValue().toString(),
+            is("https://example.org/go/api/pipelines/pipeline-test/history"));
     }
 
     @Test
@@ -45,9 +48,10 @@ public class ServerTest {
 
         ArgumentCaptor<URL> url = ArgumentCaptor.forClass(URL.class);
         verify(httpConnectionUtil).getConnection(
-                url.capture()
+            url.capture()
         );
-        assertThat(url.getValue().toString(), is("https://example.org/go/api/pipelines/pipeline-test/history"));
+        assertThat(url.getValue().toString(),
+            is("https://example.org/go/api/pipelines/pipeline-test/history"));
     }
 
     @Test
@@ -62,9 +66,10 @@ public class ServerTest {
 
         ArgumentCaptor<URL> url = ArgumentCaptor.forClass(URL.class);
         verify(httpConnectionUtil).getConnection(
-                url.capture()
+            url.capture()
         );
-        assertThat(url.getValue().toString(), is("https://example.org/go/api/pipelines/pipeline-test/instance/42"));
+        assertThat(url.getValue().toString(),
+            is("https://example.org/go/api/pipelines/pipeline-test/instance/42"));
     }
 
     /*

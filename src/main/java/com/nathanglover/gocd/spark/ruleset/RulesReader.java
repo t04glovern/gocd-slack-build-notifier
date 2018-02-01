@@ -3,7 +3,6 @@ package com.nathanglover.gocd.spark.ruleset;
 import com.thoughtworks.go.plugin.api.logging.Logger;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-
 import java.io.File;
 
 public class RulesReader {

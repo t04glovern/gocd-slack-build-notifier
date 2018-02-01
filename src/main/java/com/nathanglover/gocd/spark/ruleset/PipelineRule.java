@@ -1,16 +1,15 @@
 package com.nathanglover.gocd.spark.ruleset;
 
+import static in.ashwanthkumar.utils.lang.StringUtils.isEmpty;
+
 import com.typesafe.config.Config;
 import in.ashwanthkumar.utils.collections.Iterables;
 import in.ashwanthkumar.utils.collections.Lists;
 import in.ashwanthkumar.utils.func.Predicate;
 import in.ashwanthkumar.utils.lang.StringUtils;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static in.ashwanthkumar.utils.lang.StringUtils.isEmpty;
 
 public class PipelineRule {
 
@@ -38,6 +37,89 @@ public class PipelineRule {
     public PipelineRule(String nameRegex, String stageRegex) {
         this.nameRegex = nameRegex;
         this.stageRegex = stageRegex;
+    }
+
+    public static PipelineRule fromConfig(Config config) {
+        PipelineRule pipelineRule = new PipelineRule();
+        pipelineRule.setNameRegex(config.getString("name"));
+        if (config.hasPath("group")) {
+            pipelineRule.setGroupRegex(config.getString("group"));
+        }
+        if (config.hasPath("stage")) {
+            pipelineRule.setStageRegex(config.getString("stage"));
+        }
+        if (config.hasPath("state")) {
+            String stateT = config.getString("state");
+            String[] states = stateT.split("\\|");
+            Set<PipelineStatus> status = new HashSet<PipelineStatus>();
+            for (String state : states) {
+                status.add(PipelineStatus.valueOf(state.toUpperCase()));
+            }
+            pipelineRule.setStatus(status);
+        }
+        if (config.hasPath("room")) {
+            pipelineRule.setRoom(config.getString("room"));
+        }
+        if (config.hasPath("webhookUrl")) {
+            pipelineRule.setWebhookUrl(config.getString("webhookUrl"));
+        }
+        if (config.hasPath("owners")) {
+            List<String> nonEmptyOwners = Lists
+                .filter(config.getStringList("owners"), new Predicate<String>() {
+                    @Override
+                    public Boolean apply(String input) {
+                        return StringUtils.isNotEmpty(input);
+                    }
+                });
+            pipelineRule.getOwners().addAll(nonEmptyOwners);
+        }
+
+        return pipelineRule;
+    }
+
+    public static PipelineRule fromConfig(Config config, String room) {
+        PipelineRule pipelineRule = fromConfig(config);
+        if (StringUtils.isEmpty(pipelineRule.getRoom())) {
+            pipelineRule.setRoom(room);
+        }
+        return pipelineRule;
+    }
+
+    public static PipelineRule merge(PipelineRule pipelineRule, PipelineRule defaultRule) {
+        PipelineRule ruleToReturn = new PipelineRule(pipelineRule);
+        if (isEmpty(pipelineRule.getNameRegex())) {
+            ruleToReturn.setNameRegex(defaultRule.getNameRegex());
+        }
+
+        if (isEmpty(pipelineRule.getGroupRegex())) {
+            ruleToReturn.setGroupRegex(defaultRule.getGroupRegex());
+        }
+
+        if (isEmpty(pipelineRule.getStageRegex())) {
+            ruleToReturn.setStageRegex(defaultRule.getStageRegex());
+        }
+
+        if (isEmpty(pipelineRule.getRoom())) {
+            ruleToReturn.setRoom(defaultRule.getRoom());
+        }
+
+        if (isEmpty(pipelineRule.getWebhookUrl())) {
+            ruleToReturn.setWebhookUrl(defaultRule.getWebhookUrl());
+        }
+
+        if (pipelineRule.getStatus().isEmpty()) {
+            ruleToReturn.setStatus(defaultRule.getStatus());
+        } else {
+            ruleToReturn.getStatus().addAll(pipelineRule.getStatus());
+        }
+
+        if (pipelineRule.getOwners().isEmpty()) {
+            ruleToReturn.setOwners(defaultRule.getOwners());
+        } else {
+            ruleToReturn.getOwners().addAll(pipelineRule.getOwners());
+        }
+
+        return ruleToReturn;
     }
 
     public String getNameRegex() {
@@ -183,89 +265,6 @@ public class PipelineRule {
             ", owners=" + owners +
             ", webhookUrl=" + webhookUrl +
             '}';
-    }
-
-    public static PipelineRule fromConfig(Config config) {
-        PipelineRule pipelineRule = new PipelineRule();
-        pipelineRule.setNameRegex(config.getString("name"));
-        if (config.hasPath("group")) {
-            pipelineRule.setGroupRegex(config.getString("group"));
-        }
-        if (config.hasPath("stage")) {
-            pipelineRule.setStageRegex(config.getString("stage"));
-        }
-        if (config.hasPath("state")) {
-            String stateT = config.getString("state");
-            String[] states = stateT.split("\\|");
-            Set<PipelineStatus> status = new HashSet<PipelineStatus>();
-            for (String state : states) {
-                status.add(PipelineStatus.valueOf(state.toUpperCase()));
-            }
-            pipelineRule.setStatus(status);
-        }
-        if (config.hasPath("room")) {
-            pipelineRule.setRoom(config.getString("room"));
-        }
-        if (config.hasPath("webhookUrl")) {
-            pipelineRule.setWebhookUrl(config.getString("webhookUrl"));
-        }
-        if (config.hasPath("owners")) {
-            List<String> nonEmptyOwners = Lists
-                .filter(config.getStringList("owners"), new Predicate<String>() {
-                    @Override
-                    public Boolean apply(String input) {
-                        return StringUtils.isNotEmpty(input);
-                    }
-                });
-            pipelineRule.getOwners().addAll(nonEmptyOwners);
-        }
-
-        return pipelineRule;
-    }
-
-    public static PipelineRule fromConfig(Config config, String room) {
-        PipelineRule pipelineRule = fromConfig(config);
-        if (StringUtils.isEmpty(pipelineRule.getRoom())) {
-            pipelineRule.setRoom(room);
-        }
-        return pipelineRule;
-    }
-
-    public static PipelineRule merge(PipelineRule pipelineRule, PipelineRule defaultRule) {
-        PipelineRule ruleToReturn = new PipelineRule(pipelineRule);
-        if (isEmpty(pipelineRule.getNameRegex())) {
-            ruleToReturn.setNameRegex(defaultRule.getNameRegex());
-        }
-
-        if (isEmpty(pipelineRule.getGroupRegex())) {
-            ruleToReturn.setGroupRegex(defaultRule.getGroupRegex());
-        }
-
-        if (isEmpty(pipelineRule.getStageRegex())) {
-            ruleToReturn.setStageRegex(defaultRule.getStageRegex());
-        }
-
-        if (isEmpty(pipelineRule.getRoom())) {
-            ruleToReturn.setRoom(defaultRule.getRoom());
-        }
-
-        if (isEmpty(pipelineRule.getWebhookUrl())) {
-            ruleToReturn.setWebhookUrl(defaultRule.getWebhookUrl());
-        }
-
-        if (pipelineRule.getStatus().isEmpty()) {
-            ruleToReturn.setStatus(defaultRule.getStatus());
-        } else {
-            ruleToReturn.getStatus().addAll(pipelineRule.getStatus());
-        }
-
-        if (pipelineRule.getOwners().isEmpty()) {
-            ruleToReturn.setOwners(defaultRule.getOwners());
-        } else {
-            ruleToReturn.getOwners().addAll(pipelineRule.getOwners());
-        }
-
-        return ruleToReturn;
     }
 
 }

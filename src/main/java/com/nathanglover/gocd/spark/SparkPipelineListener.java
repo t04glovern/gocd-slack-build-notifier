@@ -1,28 +1,27 @@
 package com.nathanglover.gocd.spark;
 
-import com.ciscospark.*;
+import static in.ashwanthkumar.utils.lang.StringUtils.startsWith;
 
+import com.ciscospark.Message;
+import com.ciscospark.NotAuthenticatedException;
+import com.ciscospark.Spark;
+import com.ciscospark.Webhook;
 import com.nathanglover.gocd.spark.jsonapi.MaterialRevision;
-import com.nathanglover.gocd.spark.jsonapi.Stage;
 import com.nathanglover.gocd.spark.jsonapi.Modification;
 import com.nathanglover.gocd.spark.jsonapi.Pipeline;
+import com.nathanglover.gocd.spark.jsonapi.Stage;
 import com.nathanglover.gocd.spark.ruleset.PipelineRule;
 import com.nathanglover.gocd.spark.ruleset.PipelineStatus;
 import com.nathanglover.gocd.spark.ruleset.Rules;
-
 import com.thoughtworks.go.plugin.api.logging.Logger;
-
 import in.ashwanthkumar.utils.collections.Lists;
 import in.ashwanthkumar.utils.func.Function;
 import in.ashwanthkumar.utils.lang.StringUtils;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static in.ashwanthkumar.utils.lang.StringUtils.startsWith;
 
 public class SparkPipelineListener extends PipelineListener {
 

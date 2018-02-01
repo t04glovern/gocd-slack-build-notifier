@@ -1,16 +1,15 @@
 package com.nathanglover.gocd.spark;
 
-import com.thoughtworks.go.plugin.api.logging.Logger;
 import com.nathanglover.gocd.spark.ruleset.PipelineRule;
 import com.nathanglover.gocd.spark.ruleset.PipelineStatus;
 import com.nathanglover.gocd.spark.ruleset.Rules;
-
+import com.thoughtworks.go.plugin.api.logging.Logger;
 import java.util.List;
 
 abstract public class PipelineListener {
 
-    private Logger LOG = Logger.getLoggerFor(PipelineListener.class);
     protected Rules rules;
+    private Logger LOG = Logger.getLoggerFor(PipelineListener.class);
 
     public PipelineListener(Rules rules) {
         this.rules = rules;

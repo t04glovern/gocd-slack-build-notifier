@@ -1,7 +1,11 @@
 package com.nathanglover.gocd.spark;
 
+import static java.util.Arrays.asList;
+
 import com.google.gson.GsonBuilder;
 import com.nathanglover.gocd.spark.base.AbstractNotificationPlugin;
+import com.nathanglover.gocd.spark.ruleset.Rules;
+import com.nathanglover.gocd.spark.ruleset.RulesReader;
 import com.thoughtworks.go.plugin.api.GoApplicationAccessor;
 import com.thoughtworks.go.plugin.api.GoPlugin;
 import com.thoughtworks.go.plugin.api.GoPluginIdentifier;
@@ -9,17 +13,18 @@ import com.thoughtworks.go.plugin.api.annotation.Extension;
 import com.thoughtworks.go.plugin.api.logging.Logger;
 import com.thoughtworks.go.plugin.api.request.GoPluginApiRequest;
 import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
-import com.nathanglover.gocd.spark.ruleset.Rules;
-import com.nathanglover.gocd.spark.ruleset.RulesReader;
 import in.ashwanthkumar.utils.lang.StringUtils;
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import static java.util.Arrays.asList;
+import org.apache.commons.io.IOUtils;
 
 @Extension
 public class GoNotificationPlugin extends AbstractNotificationPlugin implements GoPlugin {
@@ -44,7 +49,7 @@ public class GoNotificationPlugin extends AbstractNotificationPlugin implements 
     private final Timer timer = new Timer();
     private GoEnvironment environment = new GoEnvironment();
     private Rules rules;
-    private long configLastModified = 0l;
+    private long configLastModified = 0L;
     private File pluginConfig;
 
     public GoNotificationPlugin() {
@@ -53,7 +58,7 @@ public class GoNotificationPlugin extends AbstractNotificationPlugin implements 
             @Override
             public void run() {
                 if (pluginConfig.lastModified() != configLastModified) {
-                    if (configLastModified == 0l) {
+                    if (configLastModified == 0L) {
                         LOGGER.info("Loading configuration file");
                     } else {
                         LOGGER.info(

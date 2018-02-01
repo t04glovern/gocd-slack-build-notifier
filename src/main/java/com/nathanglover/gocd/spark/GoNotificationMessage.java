@@ -1,11 +1,15 @@
 package com.nathanglover.gocd.spark;
 
 import com.google.gson.annotations.SerializedName;
-import com.nathanglover.gocd.spark.jsonapi.*;
-import com.thoughtworks.go.plugin.api.logging.Logger;
+import com.nathanglover.gocd.spark.jsonapi.History;
+import com.nathanglover.gocd.spark.jsonapi.MaterialRevision;
+import com.nathanglover.gocd.spark.jsonapi.Pipeline;
+import com.nathanglover.gocd.spark.jsonapi.Server;
+import com.nathanglover.gocd.spark.jsonapi.ServerFactory;
+import com.nathanglover.gocd.spark.jsonapi.Stage;
 import com.nathanglover.gocd.spark.ruleset.Rules;
+import com.thoughtworks.go.plugin.api.logging.Logger;
 import in.ashwanthkumar.utils.lang.StringUtils;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,9 +17,12 @@ import java.util.List;
 
 public class GoNotificationMessage {
 
-    private Logger LOG = Logger.getLoggerFor(GoNotificationMessage.class);
-
     private final ServerFactory serverFactory;
+    private Logger LOG = Logger.getLoggerFor(GoNotificationMessage.class);
+    @SerializedName("pipeline")
+    private PipelineInfo pipeline;
+    // Internal cache of pipeline history data from GoCD's JSON API.
+    private History mRecentPipelineHistory;
 
     public GoNotificationMessage() {
         serverFactory = new ServerFactory();
@@ -25,65 +32,6 @@ public class GoNotificationMessage {
         this.serverFactory = serverFactory;
         this.pipeline = pipeline;
     }
-
-    /**
-     * Raised when we can't find information about our build in the array returned by the server.
-     */
-    static public class BuildDetailsNotFoundException extends Exception {
-
-        public BuildDetailsNotFoundException(String pipelineName,
-            int pipelineCounter) {
-            super(String.format("could not find details for %s/%d",
-                pipelineName, pipelineCounter));
-        }
-    }
-
-    static class StageInfo {
-
-        @SerializedName("name")
-        String name;
-
-        @SerializedName("counter")
-        String counter;
-
-        @SerializedName("state")
-        String state;
-
-        @SerializedName("result")
-        String result;
-
-        @SerializedName("create-time")
-        String createTime;
-
-        @SerializedName("last-transition-time")
-        String lastTransitionTime;
-    }
-
-    static class PipelineInfo {
-
-        @SerializedName("name")
-        String name;
-
-        @SerializedName("counter")
-        String counter;
-
-        @SerializedName("group")
-        String group;
-
-        @SerializedName("stage")
-        StageInfo stage;
-
-        @Override
-        public String toString() {
-            return name + "/" + counter + "/" + stage.name + "/" + stage.result;
-        }
-    }
-
-    @SerializedName("pipeline")
-    private PipelineInfo pipeline;
-
-    // Internal cache of pipeline history data from GoCD's JSON API.
-    private History mRecentPipelineHistory;
 
     public String goServerUrl(String host) throws URISyntaxException {
         return new URI(String
@@ -223,5 +171,58 @@ public class GoNotificationMessage {
         Pipeline pipelineInstance =
             server.getPipelineInstance(pipeline.name, Integer.parseInt(pipeline.counter));
         return pipelineInstance.rootChanges(server);
+    }
+
+    /**
+     * Raised when we can't find information about our build in the array returned by the server.
+     */
+    static public class BuildDetailsNotFoundException extends Exception {
+
+        public BuildDetailsNotFoundException(String pipelineName,
+            int pipelineCounter) {
+            super(String.format("could not find details for %s/%d",
+                pipelineName, pipelineCounter));
+        }
+    }
+
+    static class StageInfo {
+
+        @SerializedName("name")
+        String name;
+
+        @SerializedName("counter")
+        String counter;
+
+        @SerializedName("state")
+        String state;
+
+        @SerializedName("result")
+        String result;
+
+        @SerializedName("create-time")
+        String createTime;
+
+        @SerializedName("last-transition-time")
+        String lastTransitionTime;
+    }
+
+    static class PipelineInfo {
+
+        @SerializedName("name")
+        String name;
+
+        @SerializedName("counter")
+        String counter;
+
+        @SerializedName("group")
+        String group;
+
+        @SerializedName("stage")
+        StageInfo stage;
+
+        @Override
+        public String toString() {
+            return name + "/" + counter + "/" + stage.name + "/" + stage.result;
+        }
     }
 }

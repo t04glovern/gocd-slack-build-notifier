@@ -10,8 +10,7 @@ public enum Status {
 
     // Non standard
     Broken("Failed"),
-    Fixed("Passed")
-    ;
+    Fixed("Passed");
 
     private String status;
     private String result;
